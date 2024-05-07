@@ -4,17 +4,18 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Applications;
+use App\Models\User;
 
-class ApplicationsSeeder extends Seeder
+class UserSeeder extends Seeder
 {
-    /**
+   /**
      * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        Applications::factory()->count(10)->create();
+        // Generate 10 fake users
+        User::factory()->count(10)->create();
     }
 }
