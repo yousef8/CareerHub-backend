@@ -9,16 +9,16 @@ class Applications extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id', 'job_id', 'resume_path', 'status'
+        'resume_path', 'status'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function job()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsToMany(Job::class);
     }
 }

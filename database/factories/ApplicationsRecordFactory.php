@@ -17,10 +17,10 @@ class ApplicationsRecordFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->randomNumber(),
-            'job_id' => $this->faker->randomNumber(),
-            'resume_path' => $this->faker->word . '.pdf', 
-            'status' => $this->faker->randomElement(['applied', 'rejected', 'accepted']),
+            'user_id' => fake()->randomNumber(),
+            'job_id' => fake()->randomNumber(),
+            'resume_path' =>fake()->word . '.pdf', 
+            'status' => fake()->randomElement(['applied', 'rejected', 'accepted']),
         ];
     }
 }
