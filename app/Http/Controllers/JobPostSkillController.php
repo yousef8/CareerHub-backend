@@ -11,16 +11,15 @@ class JobPostSkillController extends Controller
      * Retrieve all skills associated with a specific job post.
      *
      * This method returns a list of skills associated with the specified job post.
-     * The list can be paginated and filtered using query parameters.
      *
      * @param int $jobId - The ID of the job post.
      * @param Request $request - The request object containing query parameters.
      *
-     * @return JsonResponse - A JSON response containing paginated skills associated with the job post.
+     * @return JsonResponse - A JSON response containing skills associated with the job post.
      *
      * Usage example:
-     * GET /api/v1/jobs/1/skills?search=java&per_page=15
-     * This request will return a list of up to 15 skills per page associated with the job post with ID 1,
+     * GET /api/v1/jobs/1/skills?search=java
+     * This request will return a list of skills associated with the job post with ID 1,
      * filtered by the search term 'java' in the skill name.
      */
     public function index(int $jobId, Request $request): JsonResponse
@@ -28,10 +27,8 @@ class JobPostSkillController extends Controller
         // Retrieve the job post by ID
         $jobPost = JobPost::findOrFail($jobId);
 
-        // Retrieve query parameters for pagination and search
+        // Retrieve query parameter for search
         $search = $request->query('search');
-        $perPage = $request->query('per_page', 10); // Default items per page
-        $currentPage = $request->query('page', 1); // Default current page is 1
 
         // Create a base query for the job post's skills
         $query = $jobPost->skills();
@@ -41,10 +38,10 @@ class JobPostSkillController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
 
-        // Paginate the results based on the provided parameters
-        $skills = $query->paginate($perPage, ['*'], 'page', $currentPage);
+        // Get all skills associated with the job post
+        $skills = $query->get();
 
-        // Return the paginated skills as a JSON response
+        // Return the skills as a JSON response
         return response()->json($skills);
     }
 
