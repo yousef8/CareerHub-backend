@@ -1,10 +1,9 @@
-<?php
-
 namespace Database\Seeders;
 
 use App\Models\JobPost;
-use App\Models\Skill;
 use Illuminate\Database\Seeder;
+use Database\Factories\SkillSelectorFactory;
+use Database\Factories\SkillAttacherFactory;
 
 class JobPostSkillSeeder extends Seeder
 {
@@ -17,15 +16,10 @@ class JobPostSkillSeeder extends Seeder
         // Loop through each job post in the database
         foreach (JobPost::all() as $jobPost) {
             // Select a random set of skills for the current job post
-            // The number of skills to select is randomly chosen between 5 and 12
-            $skills = Skill::inRandomOrder()->take(rand(5, 12))->pluck('id');
+            $skills = SkillSelectorFactory::selectRandomSkills();
 
             // Attach each selected skill to the job post
-            // This is done by creating records in the pivot table that associates the job post with each skill
-            foreach ($skills as $skill) {
-                $jobPost->skills()->attach($skill);
-            }
+            SkillAttacherFactory::attachSkillsToJobPost($jobPost, $skills);
         }
     }
-
 }
