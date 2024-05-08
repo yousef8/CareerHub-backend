@@ -60,4 +60,14 @@ class User extends Authenticatable
     public function isAdmin(){
         return $this->role == 'admin';
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            if ($user->profile_image) {
+                Storage::disk('public')->delete('profile-images/' . basename($user->profile_image));
+            }
+        });
+    }
 }
