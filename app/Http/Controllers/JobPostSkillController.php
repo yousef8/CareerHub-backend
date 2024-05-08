@@ -1,9 +1,6 @@
-<?php
-
 namespace App\Http\Controllers;
 
 use App\Models\JobPost;
-use App\Models\Skill;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -56,7 +53,6 @@ class JobPostSkillController extends Controller
      *
      * This method adds a skill to a job post if the skill is not already attached.
      * It validates the incoming request and ensures that the skill and job post exist.
-     * It also ensures that the user is authenticated and has proper authorization (admin or employer).
      *
      * @param Request $request - The request object containing the skill ID.
      * @param int $jobId - The ID of the job post.
@@ -72,12 +68,6 @@ class JobPostSkillController extends Controller
      */
     public function store(Request $request, int $jobId): JsonResponse
     {
-        // Check if the user is authenticated and has the proper authorization (admin or employer)
-        $user = $request->user();
-        if (!$user || (!$user->isAdmin() && !$user->isEmployer())) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         // Validate the request data
         $validator = Validator::make($request->all(), [
             'skill_id' => 'required|integer|exists:skills,id',
@@ -112,7 +102,6 @@ class JobPostSkillController extends Controller
      *
      * This method detaches a skill from a job post if it is currently attached.
      * It validates that both the job post and the skill exist.
-     * It also ensures that the user is authenticated and has proper authorization (admin or employer).
      *
      * @param int $jobId - The ID of the job post.
      * @param int $skillId - The ID of the skill to detach from the job post.
@@ -123,14 +112,8 @@ class JobPostSkillController extends Controller
      * DELETE /api/v1/jobs/1/skills/5
      * This request will detach the skill with ID 5 from the job post with ID 1.
      */
-    public function destroy(int $jobId, int $skillId, Request $request): JsonResponse
+    public function destroy(int $jobId, int $skillId): JsonResponse
     {
-        // Check if the user is authenticated and has the proper authorization (admin or employer)
-        $user = $request->user();
-        if (!$user || (!$user->isAdmin() && !$user->isEmployer())) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         // Retrieve the job post and skill by their IDs
         $jobPost = JobPost::findOrFail($jobId);
         $skill = Skill::findOrFail($skillId);
