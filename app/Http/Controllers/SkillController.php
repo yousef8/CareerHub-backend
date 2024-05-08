@@ -83,7 +83,7 @@ class SkillController extends Controller
      * GET /api/skills/1
      * This would retrieve the skill with an ID of 1 and return the skill object.
      */
-    public function show(int $id): JsonResponse
+    public function show(Skill $skill): JsonResponse
     {
         $skill = Skill::find($id);
         if (!$skill) {
