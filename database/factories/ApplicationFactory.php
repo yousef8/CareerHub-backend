@@ -20,8 +20,8 @@ class ApplicationFactory extends Factory
         return [
             'user_id' => User::pluck('id')->random(),
             'job_id' => JobPost::pluck('id')->random(),
-            'resume_path' => 'storage/candidate-resumes/' . $this->faker->word . '.pdf',
-            'status' => $this->faker->randomElement(['pending', 'rejected', 'accepted']),
+            'resume_path' => 'storage/candidate-resumes/' . fake()->word . '.pdf',
+            'status' => fake()->randomElement(['pending', 'rejected', 'accepted']),
         ];
     }
 }
