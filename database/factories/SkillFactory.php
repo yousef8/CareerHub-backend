@@ -19,7 +19,7 @@ class SkillFactory extends Factory
     {
         return [
             // Generate a string of 2 random words separated by a space as the skill name.
-            'name' => implode(' ', fake()->words(3)),
+            'name' => implode(' ', fake()->words()),
         ];
     }
 }
