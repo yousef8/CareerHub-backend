@@ -1,5 +1,3 @@
-<?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,11 +9,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('job_post_skill', function (Blueprint $table) {
-            $table->foreignId('job_post_id')
+            $table->foreignIdFor('job_posts', 'job_post_id')
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignId('skill_id')
+            $table->foreignIdFor('skills', 'skill_id')
                 ->constrained()
                 ->cascadeOnDelete();
 
@@ -30,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_skills');
+        Schema::dropIfExists('job_post_skill');
     }
 };
