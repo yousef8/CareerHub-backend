@@ -14,6 +14,6 @@ class IndustrySeeder extends Seeder
      */
     public function run(): void
     {
-        Industry::factory(5)->create();
+        Industry::factory(10)->create();
     }
 }
