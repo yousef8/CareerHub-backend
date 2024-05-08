@@ -1,27 +1,29 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Enums\ServerStatus;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Http\Request;
-use App\Models\Applications;
+use App\Models\Application;
 
 class ApplicationController extends Controller
 {
     public function index()
     {
         // Fetch all applications from the database
-        $applications = Applications::all();
-        return response()->json($applications);
+        $application = Application::all();
+        return response()->json($application);
     }
 
-    public function store(Request $request)
+    public function store(StoreApplicationRequest $request)
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'job_id' => 'required|exists:job_posts,id',
-            'resume_path' => 'required|string',
-            'status' => 'required|string',
+            'resume_path' =>  'required|mimes:pdf',
+            'status' => [Rule::enum(ServerStatus::class)],
         ]);
 
         // Create the application
@@ -33,14 +35,14 @@ class ApplicationController extends Controller
     public function show($id)
     {
         // Find the application by ID
-        $application = Applications::findOrFail($id);
+        $application = Application::findOrFail($id);
         return response()->json($application);
     }
 
     public function update(Request $request, $id)
     {
         // Find the application by ID
-        $application = Applications::findOrFail($id);
+        $application = Application::findOrFail($id);
 
         // Validate incoming request data
         $validatedData = $request->validate([
@@ -56,7 +58,7 @@ class ApplicationController extends Controller
     public function destroy($id)
     {
         // Find the application by ID
-        $application = Applications::findOrFail($id);
+        $application = Application::findOrFail($id);
 
         // Delete the application
         $application->delete();

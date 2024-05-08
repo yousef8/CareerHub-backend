@@ -8,8 +8,4 @@ Route::get('/', function () {
 });
 
 // Define routes for applications
-Route::get('/applications', [ApplicationController::class, 'index']);
-Route::post('/applications', [ApplicationController::class, 'store']);
-Route::get('/applications/{id}', [ApplicationController::class, 'show']);
-Route::put('/applications/{id}', [ApplicationController::class, 'update']);
-Route::delete('/applications/{id}', [ApplicationController::class, 'destroy']);
+Route::apiResource('application', ApplicationController::class);

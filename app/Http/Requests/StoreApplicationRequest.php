@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
+use App\Enums\ServerStatus;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,8 +26,8 @@ class StoreApplicationRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'job_id' => 'required|exists:jobs,id',
-            'resume_path' => 'required|string',
-            'status' => 'required|string',
+            'resume_path' =>  'required|mimes:pdf',
+            'status' => [Rule::enum(ServerStatus::class)]
         ];
     }
 }
