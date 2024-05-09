@@ -30,4 +30,9 @@ class JobPost extends Model
     {
         return $this->belongsToMany(Skill::class, 'job_post_skill');
     }
+
+    public function appliedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'applications')->withPivot('resume_path', 'status')->withTimestamps();
+    }
 }

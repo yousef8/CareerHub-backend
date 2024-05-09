@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class StoreApplicationRequest extends FormRequest
+class UpdateApplicationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +23,9 @@ class StoreApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
-            'job_post_id' => 'required|exists:job_posts,id',
-            'resume_path' =>  'required|mimes:pdf',
+            'user_id' => 'sometimes|exists:users,id',
+            'job_post_id' => 'sometimes|exists:jobs,id',
+            'resume_path' =>  'sometimes|mimes:pdf',
             'status' => ['sometimes', Rule::in(['pending', 'rejected', 'accepted'])]
         ];
     }
