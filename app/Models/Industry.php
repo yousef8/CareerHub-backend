@@ -11,7 +11,8 @@ class Industry extends Model
 
     protected $fillable = ['name'];
 
-    public function jobs() {
-        return $this->belongsToMany(JobPost::class);
+    public function jobs()
+    {
+        return $this->belongsToMany(JobPost::class, 'job_industry');
     }
 }

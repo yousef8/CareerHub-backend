@@ -41,4 +41,9 @@ class JobPost extends Model
     {
         return $this->belongsToMany(User::class, 'applications')->withPivot('resume_path', 'status')->withTimestamps();
     }
+
+    public function industries(): BelongsToMany
+    {
+        return $this->belongsToMany(Industry::class, 'job_industry')->withTimestamps();
+    }
 }
