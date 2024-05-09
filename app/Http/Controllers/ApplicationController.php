@@ -44,7 +44,6 @@ class ApplicationController extends Controller
         // Find the application by ID
         $application = Application::findOrFail($id);
 
-        // Validate incoming request data
         $validatedData = $request->validate([
             // Define validation rules here
         ]);
@@ -63,6 +62,6 @@ class ApplicationController extends Controller
         // Delete the application
         $application->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message'=>"the application deleted",'status_code'=>204], 204);
     }
 }
