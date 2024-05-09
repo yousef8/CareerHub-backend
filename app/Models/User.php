@@ -20,6 +20,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone_number',
+        'profile_image',
+        'cover_image',
+        'role'
     ];
 
     /**
@@ -43,5 +47,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isEmployer(){
+        return $this->role == 'employer';
+    }
+
+    public function isCandidate(){
+        return $this->role == 'candidate';
+    }
+
+    public function isAdmin(){
+        return $this->role == 'admin';
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            if ($user->profile_image) {
+                Storage::disk('public')->delete('profile-images/' . basename($user->profile_image));
+            }
+        });
     }
 }

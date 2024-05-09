@@ -6,7 +6,6 @@ use App\Models\User;
 use Database\Seeders\ApplicationSeeder;
 use Database\Seeders\JobPostSeeder;
 use Database\Seeders\UserSeeder;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,9 +16,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            JobPostSeeder::class,
             UserSeeder::class,
-            ApplicationSeeder::class
+            JobPostSeeder::class,
+            ApplicationSeeder::class,
+            IndustrySeeder::class,
+            SkillSeeder::class,
+            JobPostSkillSeeder::class,
         ]);
         
     }
