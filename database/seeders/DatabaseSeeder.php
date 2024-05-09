@@ -7,6 +7,7 @@ use Database\Seeders\ApplicationSeeder;
 use Database\Seeders\JobPostSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Database\Seeder;
+use Database\Seeders\JobPostSkillSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,6 +24,5 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             JobPostSkillSeeder::class,
         ]);
-        
     }
 }

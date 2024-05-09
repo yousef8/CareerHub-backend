@@ -10,6 +10,4 @@ Route::apiResource('users', UserController::class);
 
 Route::apiResource('skills', SkillController::class);
 
-Route::apiResource('jobs', JobPostSkillController::class);
-
 Route::apiResource('industries', IndustryController::class);
