@@ -18,33 +18,49 @@ class ApplicationController extends Controller
 
     public function store(StoreApplicationRequest $request)
     {
-        $validatedData = $request->validated();
+        // Validate the incoming request data
+        $validated = $request->validated();
+    
+        if (!isset($validated['job_id'])) {
+            return response()->json(['error' => 'Please select a job before applying.'], 400);
+        }
+    
+        if ($request->hasFile('resume_path')) {
+            $validated['resume_path'] = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
+        }
+      // Create and save the application
+    $application = Application::create($validated);
 
-        $application = Application::create($validatedData);
-
-        return response()->json($application, 201);
+    return response()->json($application)->setStatusCode(201);
     }
-
+    
+    
     public function show(Application $application)
     {
         return response()->json($application);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateApplicationRequest $request, Application $application)
     {
-        // Find the application by ID
-        $application = Application::findOrFail($id);
-
-        // Validate incoming request data
-        $validatedData = $request->validate([
-            // Define validation rules here
-        ]);
-
-        // Update the application
-        $application->update($validatedData);
-
-        return response()->json($application, 200);
+        $validated = $request->validated();
+        // dd($validated);
+        // dd($application);
+    
+        if ($request->hasFile('resume_path')) {
+            $validated['resume_path'] = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
+    
+            // Delete old resume file if exists
+            if ($application->resume_path) {
+                Storage::disk('public')->delete('resumes/' . basename($application->resume_path));
+            }
+        }
+    
+        $application->update($validated);
+    
+        return response()->json($application)->setStatusCode(200);
     }
+    
+    
 
     public function destroy(Application $application)
     {
