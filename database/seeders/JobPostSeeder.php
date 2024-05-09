@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\JobPost;
+use App\Models\User;
 
 class JobPostSeeder extends Seeder
 {
@@ -13,6 +14,10 @@ class JobPostSeeder extends Seeder
      */
     public function run(): void
     {
-        JobPost::factory()->count(20)->create();
+        $employers = User::where('role', 'employer')->get();
+
+        $employers->each(function ($employer) {
+            $employer->postedJobs()->saveMany(JobPost::factory()->count(rand(0, 5))->make());
+        });
     }
 }

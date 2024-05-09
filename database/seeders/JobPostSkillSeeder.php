@@ -20,7 +20,7 @@ class JobPostSkillSeeder extends Seeder
         foreach ($jobPosts as $post) {
             $attachedSkills = $skills->random(rand(2, 3));
 
-            $post->skills()->attach($attachedSkills);
+            $post->skills()->sync($attachedSkills);
         }
     }
 }
