@@ -28,8 +28,6 @@ class JobPost extends Model
 
     public function skills(): BelongsToMany
     {
-        return $this
-            ->belongsToMany(Skill::class)
-            ->withTimestamps();
+        return $this->belongsToMany(Skill::class, 'job_post_skill');
     }
 }

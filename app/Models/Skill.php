@@ -10,19 +10,12 @@ class Skill extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
     ];
 
     public function jobPosts(): BelongsToMany
     {
-        return $this
-            ->belongsToMany(JobPost::class)
-            ->withTimestamps();
+        return $this->belongsToMany(JobPost::class, 'job_post_skill');
     }
 }
