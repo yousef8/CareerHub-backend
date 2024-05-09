@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(JobPost::class)->constrained()->cascadeOnDelete();
             $table->string('resume_path');
             $table->enum('status', ['pending', 'rejected', 'accepted'])->default('pending');
-            $table->unique(['job_post_id', 'skill_id']);
+            $table->unique(['job_post_id', 'user_id']);
             $table->timestamps();
         });
     }
