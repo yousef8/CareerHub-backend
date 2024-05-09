@@ -1,41 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Enums\ServerStatus;
-use Illuminate\Validation\Rule;
 
-use Illuminate\Http\Request;
+use App\Enums\ServerStatus;
+
 use App\Models\Application;
+use App\Http\Requests\StoreApplicationRequest;
+use App\Http\Requests\UpdateApplicationRequest;
 
 class ApplicationController extends Controller
 {
     public function index()
     {
-        // Fetch all applications from the database
         $application = Application::all();
         return response()->json($application);
     }
 
     public function store(StoreApplicationRequest $request)
     {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'job_id' => 'required|exists:job_posts,id',
-            'resume_path' =>  'required|mimes:pdf',
-            'status' => [Rule::enum(ServerStatus::class)],
-        ]);
+        $validatedData = $request->validated();
 
-        // Create the application
         $application = Application::create($validatedData);
 
         return response()->json($application, 201);
     }
 
-    public function show($id)
+    public function show(Application $application)
     {
-        // Find the application by ID
-        $application = Application::findOrFail($id);
         return response()->json($application);
     }
 
@@ -44,6 +35,7 @@ class ApplicationController extends Controller
         // Find the application by ID
         $application = Application::findOrFail($id);
 
+        // Validate incoming request data
         $validatedData = $request->validate([
             // Define validation rules here
         ]);
@@ -54,12 +46,8 @@ class ApplicationController extends Controller
         return response()->json($application, 200);
     }
 
-    public function destroy($id)
+    public function destroy(Application $application)
     {
-        // Find the application by ID
-        $application = Application::findOrFail($id);
-
-        // Delete the application
         $application->delete();
 
         return response()->json(['message'=>"the application deleted",'status_code'=>204], 204);

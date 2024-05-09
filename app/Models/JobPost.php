@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JobPost extends Model
 {
@@ -24,4 +25,14 @@ class JobPost extends Model
         'remote_type',
         'experience_level'
     ];
+
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class, 'job_post_skill');
+    }
+
+    public function appliedUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'applications')->withPivot('resume_path', 'status')->withTimestamps();
+    }
 }
