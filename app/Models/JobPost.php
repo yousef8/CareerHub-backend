@@ -24,7 +24,8 @@ class JobPost extends Model
         'is_approved',
         'type',
         'remote_type',
-        'experience_level'
+        'experience_level',
+        'user_id',
     ];
 
     public function employer(): BelongsTo

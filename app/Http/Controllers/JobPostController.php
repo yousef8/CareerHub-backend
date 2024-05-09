@@ -2,49 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ServerStatus;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreJobPostRequest;
 use App\Http\Requests\UpdateJobPostRequest;
 use App\Models\JobPost;
 
+
 class JobPostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $jobPosts = JobPost::all();
+        return response()->json($jobPosts);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreJobPostRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $jobPost = JobPost::create($validatedData);
+        return response()->json($jobPost, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(JobPost $jobPost)
+    public function show($id)
     {
-        //
+        $jobPost = JobPost::findOrFail($id);
+        return response()->json($jobPost);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateJobPostRequest $request, JobPost $jobPost)
+    public function update(UpdateJobPostRequest $request, $id)
     {
-        //
+        $jobPost = JobPost::findOrFail($id);
+        $validatedData = $request->validated();
+        $jobPost->update($validatedData);
+        return response()->json($jobPost);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(JobPost $jobPost)
+    
+    public function destroy(Request $request,$id)
     {
-        //
+        $jobPost = JobPost::findOrFail($id);
+        $jobPost->delete();
+        return response()->json(['message' => 'Job post deleted successfully']);
     }
+    
 }
