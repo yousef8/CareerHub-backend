@@ -17,4 +17,6 @@ Route::apiResource('industries', IndustryController::class);
 
 Route::apiResource('applications', ApplicationController::class);
 
+Route::get('jobs/search', [JobPostController::class, 'search']);
 Route::apiResource('jobs', JobPostController::class);
+
