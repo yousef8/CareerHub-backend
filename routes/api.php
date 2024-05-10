@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\IndustryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\JobPostController;
+
 
 Route::apiResource('users', UserController::class);
 
@@ -14,3 +16,6 @@ Route::apiResource('skills', SkillController::class);
 Route::apiResource('industries', IndustryController::class);
 
 Route::apiResource('applications', ApplicationController::class);
+
+Route::apiResource('jobs', JobPostController::class);
+

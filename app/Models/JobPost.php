@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class JobPost extends Model
@@ -23,8 +24,14 @@ class JobPost extends Model
         'is_approved',
         'type',
         'remote_type',
-        'experience_level'
+        'experience_level',
+        'user_id',
     ];
+
+    public function employer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function skills(): BelongsToMany
     {
@@ -34,5 +41,10 @@ class JobPost extends Model
     public function appliedUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'applications')->withPivot('resume_path', 'status')->withTimestamps();
+    }
+
+    public function industries(): BelongsToMany
+    {
+        return $this->belongsToMany(Industry::class, 'job_industry')->withTimestamps();
     }
 }

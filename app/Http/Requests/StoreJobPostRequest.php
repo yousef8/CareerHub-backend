@@ -11,7 +11,7 @@ class StoreJobPostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,22 @@ class StoreJobPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'required|string',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'min_salary' => 'sometimes|numeric|min:0',
+            'max_salary' => 'sometimes|numeric|min:0',
+            'min_exp_years' => 'sometimes|integer|min:0',
+            'max_exp_years' => 'sometimes|integer|min:0',
+            'expires_at' => 'sometimes|date',
+            'is_approved' => 'required|boolean',
+            'type' => 'required|string|in:full-time,part-time,contract,freelance',
+            'remote_type' => 'required|string|in:remote,onsite,hybrid',
+            'experience_level' => 'required|string|in:entry_level,associate, mid-senior,director,executive',
+            'user_id' => 'required|exists:users,id',
         ];
     }
+
 }

@@ -33,8 +33,8 @@ class ApplicationController extends Controller
 
     return response()->json($application)->setStatusCode(201);
     }
-    
-    
+
+
     public function show(Application $application)
     {
         return response()->json($application);
@@ -43,8 +43,6 @@ class ApplicationController extends Controller
     public function update(UpdateApplicationRequest $request, Application $application)
     {
         $validated = $request->validated();
-        // dd($validated);
-        // dd($application);
     
         if ($request->hasFile('resume_path')) {
             $validated['resume_path'] = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
