@@ -25,7 +25,7 @@ class StoreApplicationRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'job_post_id' => 'required|exists:job_posts,id',
+            'job_id' => 'required|exists:job_posts,id',
             'resume_path' =>  'required|mimes:pdf',
             'status' => ['sometimes', Rule::in(['pending', 'rejected', 'accepted'])]
         ];
