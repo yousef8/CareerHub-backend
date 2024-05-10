@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\JobPostSkillController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IndustryController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\JobPostController;

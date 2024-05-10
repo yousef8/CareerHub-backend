@@ -18,12 +18,22 @@ class ApplicationController extends Controller
 
     public function store(StoreApplicationRequest $request)
     {
-        $validatedData = $request->validated();
+        // Validate the incoming request data
+        $validated = $request->validated();
+    
+        if (!isset($validated['job_id'])) {
+            return response()->json(['error' => 'Please select a job before applying.'], 400);
+        }
+    
+        if ($request->hasFile('resume_path')) {
+            $validated['resume_path'] = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
+        }
+      // Create and save the application
+    $application = Application::create($validated);
 
-        $application = Application::create($validatedData);
-
-        return response()->json($application, 201);
+    return response()->json($application)->setStatusCode(201);
     }
+
 
     public function show(Application $application)
     {
@@ -32,17 +42,28 @@ class ApplicationController extends Controller
 
     public function update(UpdateApplicationRequest $request, Application $application)
     {
-        $validatedData = $request->validated();
-
-        $application->updateOrFail($validatedData);
-
-        return response()->json($application, 200);
+        $validated = $request->validated();
+    
+        if ($request->hasFile('resume_path')) {
+            $validated['resume_path'] = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
+    
+            // Delete old resume file if exists
+            if ($application->resume_path) {
+                Storage::disk('public')->delete('resumes/' . basename($application->resume_path));
+            }
+        }
+    
+        $application->update($validated);
+    
+        return response()->json($application)->setStatusCode(200);
     }
+    
+    
 
     public function destroy(Application $application)
     {
         $application->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message'=>"the application deleted",'status_code'=>204], 204);
     }
 }
