@@ -34,8 +34,9 @@ Route::apiResource('industries', IndustryController::class)->middleware('auth:sa
 
 Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
+Route::get('jobs/search', [JobPostController::class, 'search']);
 Route::get('jobs', [JobPostController::class, 'index']);
-
+Route::get('jobs/{id}', [JobPostController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('jobs', JobPostController::class)->except(['index']);
+    Route::apiResource('jobs', JobPostController::class)->except(['index', 'show']);
 });
