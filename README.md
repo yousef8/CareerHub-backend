@@ -18,7 +18,7 @@ RESTful API backend using Laravel
 *   Generate encryption key
 
     ```bash
-    php artisan key:generate`
+    php artisan key:generate
     ```
 
 *   Migrate DB
@@ -31,6 +31,12 @@ RESTful API backend using Laravel
 
     ```bash
     php artisan db:seed
+    ```
+
+*   Link Storage [For uploading images successfully]
+
+    ```bash
+    php artisan storage:link
     ```
 
 -   Enjoy ^\_^
