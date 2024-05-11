@@ -48,13 +48,13 @@ class JobPostController extends Controller
     public function search(Request $request)
     {
         $keywords = $request->get('keywords');
-        $city = $request->get('city'); // Can be city, state, country etc.
-        $country = $request->get('country'); // Can be city, state, country etc.
-        $category = $request->get('category'); // Industry or Job Category
+        $city = $request->get('city'); 
+        $country = $request->get('country'); 
+        $category = $request->get('category');
         $experienceLevel = $request->get('experience_level');
         $minSalary = $request->get('min_salary');
         $maxSalary = $request->get('max_salary');
-        $postedAfter = $request->get('posted_after'); // Date after which jobs were posted
+        $postedAfter = $request->get('posted_after');
 
         $jobs = $this->buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter);
 
@@ -65,22 +65,9 @@ class JobPostController extends Controller
     {
       $query = JobPost::query();
     
-      // Filter by keywords (exact title match)
-    //   if ($keywords) {
-    //     $query->where('title', 'LIKE', "%{$keywords}%");
-    //   }
-     
-        // Filter by keywords (title or description match)
-        // if ($keywords) {
-        //     $query->where(function ($query) use ($keywords) {
-        //     $query->where('title', 'LIKE', "%{$keywords}%")
-        //         ->orWhere('description', 'LIKE', "%{$keywords}%");
-        //     });
-        // }
 
-        // Filter by keywords (title or description match)
         if ($keywords) {
-            $keywords = explode(' ', $keywords); // Split keywords into an array
+            $keywords = explode(' ', $keywords);
             $query->where(function ($query) use ($keywords) {
               foreach ($keywords as $keyword) {
                 $query->orWhere(function ($subquery) use ($keyword) {
@@ -91,14 +78,6 @@ class JobPostController extends Controller
             });
         }
            
-      
-    
-        // Filter by location
-        // if ($location) {
-        //     $query->where('city', $location); // Or use a location matching logic based on your schema
-        // }
-
-        // Filter by location (partial match)
         if ($city) {
             $query->where('city', 'LIKE', "%{$city}%");
         }
@@ -108,18 +87,16 @@ class JobPostController extends Controller
         }
         
 
-
-      // Filter by category
       if ($category) {
-        $query->where('category', $category); // Or use a category matching logic based on your schema
+        $query->where('category', $category); 
       }
     
-      // Filter by experience level
+  
       if ($experienceLevel) {
         $query->where('experience_level', $experienceLevel);
       }
     
-        // Filter by salary range
+       
       if ($minSalary) {
         $minSalary = intval($minSalary);
         $query->where('min_salary' , '>=', $minSalary);
@@ -130,13 +107,12 @@ class JobPostController extends Controller
         $query->where('max_salary' , '<=', $maxSalary);
       }
       
-    
-      // Filter by posted date
+      
       if ($postedAfter) {
         $query->whereDate('created_at', '>=', $postedAfter);
       }
     
-      // Enable logging for debugging (optional)
+      
       if (config('app.debug')) {
         \Log::debug('Search Query: ' . $query->toSql());
       }
