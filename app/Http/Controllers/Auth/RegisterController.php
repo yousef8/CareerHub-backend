@@ -13,7 +13,7 @@ class RegisterController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate(
+        $validRequest = $request->validate(
             [
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -32,15 +32,16 @@ class RegisterController extends Controller
             ]
         );
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($request->hasFile('profile_image')) {
+            $validRequest['profile_image'] = '/storage/' . $request->file('profile_image')->store('profile-images', 'public');
+        }
 
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user,
-        ], 201);
+        if ($request->hasFile('cover_image')) {
+            $validRequest['cover_image'] = '/storage/' . $request->file('cover_image')->store('cover-images', 'public');
+        }
+
+        $user = User::create($validRequest);
+
+        return response()->json($user, 201);
     }
 }
