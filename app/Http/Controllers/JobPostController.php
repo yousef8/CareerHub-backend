@@ -119,20 +119,17 @@ class JobPostController extends Controller
         $query->where('experience_level', $experienceLevel);
       }
     
-      // Filter by salary range (with additional checks)
-      if ($minSalary && $maxSalary) {
-        // Ensure data type consistency (assuming integer salary)
+        // Filter by salary range
+      if ($minSalary) {
         $minSalary = intval($minSalary);
-        $maxSalary = intval($maxSalary);
-    
-        // Handle empty values (optional, adjust based on your needs)
-        if ($minSalary > 0 && $maxSalary > 0) {
-          $query->whereBetween('min_salary', [$minSalary, $maxSalary]);
-        } else {
-          // Log or handle cases where one or both salaries are empty/invalid
-          // (e.g., display a message to the user)
-        }
+        $query->where('min_salary' , '>=', $minSalary);
       }
+
+      if ($maxSalary) {
+        $maxSalary = intval($maxSalary);
+        $query->where('max_salary' , '<=', $maxSalary);
+      }
+      
     
       // Filter by posted date
       if ($postedAfter) {
