@@ -14,10 +14,17 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Middleware\OnlyAdmin;
 
 Route::post('login', [LoginController::class, 'login']);
-
 Route::post('register', [RegisterController::class, 'register']);
 
 Route::post('user/logout', [LogoutController::class, 'logout'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('user', function (Request $request) {
+        return response()->json($request->user());
+    });
+    Route::get('user/me', function (Request $request) {
+        return response()->json($request->user());
+    });
+});
 
 Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', OnlyAdmin::class]);
 
