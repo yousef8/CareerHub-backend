@@ -48,32 +48,67 @@ class JobPostController extends Controller
     public function search(Request $request)
     {
         $keywords = $request->get('keywords');
-        $location = $request->get('location'); // Can be city, state, country etc.
+        $city = $request->get('city'); // Can be city, state, country etc.
+        $country = $request->get('country'); // Can be city, state, country etc.
         $category = $request->get('category'); // Industry or Job Category
         $experienceLevel = $request->get('experience_level');
         $minSalary = $request->get('min_salary');
         $maxSalary = $request->get('max_salary');
         $postedAfter = $request->get('posted_after'); // Date after which jobs were posted
 
-        $jobs = $this->buildSearchQuery($keywords, $location, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter);
+        $jobs = $this->buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter);
 
         return response()->json($jobs);
     }
 
-    private function buildSearchQuery($keywords, $location, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter)
+    private function buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter)
     {
       $query = JobPost::query();
     
       // Filter by keywords (exact title match)
-      if ($keywords) {
-        $query->where('title', 'LIKE', "%{$keywords}%");
-      }
+    //   if ($keywords) {
+    //     $query->where('title', 'LIKE', "%{$keywords}%");
+    //   }
+     
+        // Filter by keywords (title or description match)
+        // if ($keywords) {
+        //     $query->where(function ($query) use ($keywords) {
+        //     $query->where('title', 'LIKE', "%{$keywords}%")
+        //         ->orWhere('description', 'LIKE', "%{$keywords}%");
+        //     });
+        // }
+
+        // Filter by keywords (title or description match)
+        if ($keywords) {
+            $keywords = explode(' ', $keywords); // Split keywords into an array
+            $query->where(function ($query) use ($keywords) {
+              foreach ($keywords as $keyword) {
+                $query->orWhere(function ($subquery) use ($keyword) {
+                  $subquery->where('title', 'LIKE', "%{$keyword}%")
+                           ->orWhere('description', 'LIKE', "%{$keyword}%");
+                });
+              }
+            });
+        }
+           
+      
     
-      // Filter by location
-      if ($location) {
-        $query->where('city', $location); // Or use a location matching logic based on your schema
-      }
-    
+        // Filter by location
+        // if ($location) {
+        //     $query->where('city', $location); // Or use a location matching logic based on your schema
+        // }
+
+        // Filter by location (partial match)
+        if ($city) {
+            $query->where('city', 'LIKE', "%{$city}%");
+        }
+        
+        if ($country) {
+            $query->where('country', 'LIKE', "%{$country}%");
+        }
+        
+
+
       // Filter by category
       if ($category) {
         $query->where('category', $category); // Or use a category matching logic based on your schema
