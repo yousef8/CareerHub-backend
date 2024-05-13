@@ -19,9 +19,10 @@ class JobPostController extends Controller
 
     public function store(StoreJobPostRequest $request)
     {
-        $validatedData = $request->validated();
-        $jobPost = JobPost::create($validatedData);
-        return response()->json($jobPost, 201);
+      $jobPost = $request->user()->postedJobs()->create($request->validated());
+      // $jobPost->skills()->sync($request->get('skills'));
+      // $jobPost->skills()->sync($request->get('industries'));
+      return response()->json($jobPost, 201);
     }
 
     public function show($id)
