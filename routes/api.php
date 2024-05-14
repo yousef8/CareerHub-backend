@@ -39,6 +39,12 @@ Route::get('jobs/search', [JobPostController::class, 'search']);
 Route::post('jobs', [JobPostController::class, 'store']);
 
 Route::get('jobs/{id}', [JobPostController::class, 'show']);
-Route::delete('jobs/{id}', [JobPostController::class, 'destroy']);
-Route::put('jobs/{id}', [JobPostController::class, 'update']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('jobs', JobPostController::class)->except(['index', 'show']);
+});
 
+Route::get('industries', [IndustryController::class, 'index']);
+Route::get('industries/{id}', [IndustryController::class, 'show']);
+Route::group(['middleware' => ['auth:sanctum', OnlyAdmin::class]], function () {
+    Route::apiResource('industries', IndustryController::class)->except(['index', 'show']);
+});
