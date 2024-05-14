@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreIndustryRequest;
+use App\Http\Requests\UpdateIndustryRequest;
 use App\Models\Industry;
 use Illuminate\Http\Request;
 
@@ -13,35 +15,31 @@ class IndustryController extends Controller
         return response()->json($industries);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreIndustryRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $industry = Industry::create($validatedData);
+        return response()->json($industry, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $industry = Industry::findOrFail($id);
+        return response()->json($industry);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateIndustryRequest $request, string $id)
     {
-        //
+        $industry = Industry::findOrFail($id);
+        $validatedData = $request->validated();
+        $industry->update($validatedData);
+        return response()->json($industry);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $industry = Industry::findOrFail($id);
+        $industry->delete();
+        return response()->json(['message' => 'Industry deleted successfully']);
     }
 }
