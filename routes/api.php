@@ -12,6 +12,7 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Middleware\OnlyAdmin;
+use App\Http\Middleware\OnlyEmployer;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
@@ -32,16 +33,16 @@ Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum')
 
 Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
+// unprotected routes
 Route::get('jobs', [JobPostController::class, 'index']);
-Route::get('jobs/unApproved', [JobPostController::class, 'unApproved']);
 Route::get('jobs/search', [JobPostController::class, 'search']);
-
-Route::post('jobs', [JobPostController::class, 'store']);
-
 Route::get('jobs/{id}', [JobPostController::class, 'show']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('jobs', JobPostController::class)->except(['index', 'show']);
-});
+// protected routes
+Route::get('jobs/unApproved', [JobPostController::class, 'unApproved'])->middleware(['auth:sanctum', OnlyAdmin::class]);
+Route::put('jobs/approve/{id}', [JobPostController::class, 'approve'])->middleware(['auth:sanctum', OnlyAdmin::class]);
+Route::post('jobs', [JobPostController::class, 'store'])->middleware(['auth:sanctum', OnlyEmployer::class]);
+Route::delete('jobs/{id}', [JobPostController::class, 'destroy'])->middleware(['auth:sanctum', OnlyEmployer::class]);
+Route::put('jobs/{id}', [JobPostController::class, 'update'])->middleware(['auth:sanctum', OnlyEmployer::class]);
 
 Route::get('industries', [IndustryController::class, 'index']);
 Route::get('industries/{id}', [IndustryController::class, 'show']);
