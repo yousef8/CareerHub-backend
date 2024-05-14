@@ -31,8 +31,6 @@ Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 
 
 Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum');
 
-Route::apiResource('industries', IndustryController::class)->middleware('auth:sanctum');
-
 Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
 
@@ -41,7 +39,6 @@ Route::get('jobs', [JobPostController::class, 'index']);
 Route::get('jobs/search', [JobPostController::class, 'search']);
 Route::get('jobs/{id}', [JobPostController::class, 'show']);
 
-
 // protected routes
 Route::get('jobs/unApproved', [JobPostController::class, 'unApproved'])->middleware(['auth:sanctum', OnlyAdmin::class]);
 Route::put('jobs/approve/{id}', [JobPostController::class, 'approve'])->middleware(['auth:sanctum', OnlyAdmin::class]);
@@ -49,3 +46,8 @@ Route::post('jobs', [JobPostController::class, 'store'])->middleware(['auth:sanc
 Route::delete('jobs/{id}', [JobPostController::class, 'destroy'])->middleware(['auth:sanctum', OnlyEmployer::class]);
 Route::put('jobs/{id}', [JobPostController::class, 'update'])->middleware(['auth:sanctum', OnlyEmployer::class]);
 
+Route::get('industries', [IndustryController::class, 'index']);
+Route::get('industries/{id}', [IndustryController::class, 'show']);
+Route::group(['middleware' => ['auth:sanctum', OnlyAdmin::class]], function () {
+    Route::apiResource('industries', IndustryController::class)->except(['index', 'show']);
+});
