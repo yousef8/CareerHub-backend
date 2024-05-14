@@ -30,8 +30,6 @@ Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 
 
 Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum');
 
-Route::apiResource('industries', IndustryController::class)->middleware('auth:sanctum');
-
 Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
 Route::get('jobs', [JobPostController::class, 'index']);
