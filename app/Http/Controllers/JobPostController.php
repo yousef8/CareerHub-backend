@@ -77,13 +77,15 @@ class JobPostController extends Controller
         $minSalary = $request->get('min_salary');
         $maxSalary = $request->get('max_salary');
         $postedAfter = $request->get('posted_after');
+        $skills = $request->get('skills');
+        $industries = $request->get('industries');
 
-        $jobs = $this->buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter);
+        $jobs = $this->buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
 
         return response()->json($jobs);
     }
 
-    private function buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter)
+    private function buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries)
     {
       $query = JobPost::query();
     
@@ -133,19 +135,28 @@ class JobPostController extends Controller
       if ($postedAfter) {
         $query->whereDate('created_at', '>=', $postedAfter);
       }
-    
-      
+
+      if ($skills) {
+          $query->with('skills');
+          $requiredSkills = explode(' ', $skills);
+          $query->whereHas('skills', function ($query) use ($requiredSkills) {
+            $query->whereIn('name', $requiredSkills);
+        });
+      }
+
+      if ($industries) {
+        $query->with('industries');
+        $Industries = explode(' ', $industries);
+        $query->whereHas('industries', function ($query) use ($Industries) {
+          $query->whereIn('name', $Industries);
+      });
+    }
+
       if (config('app.debug')) {
         \Log::debug('Search Query: ' . $query->toSql());
       }
     
       return $query->where('is_approved', 1)->get();
     }
-    
-
-
-
-
-
     
 }
