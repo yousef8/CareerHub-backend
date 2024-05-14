@@ -11,20 +11,29 @@ use App\Models\JobPost;
 
 class JobPostController extends Controller
 {
-    public function index()
+    public function unApproved()
     {
-        $jobPosts = JobPost::all();
+        $jobPosts = JobPost::where('is_approved', 0)->get();
         return response()->json($jobPosts);
     }
 
+    public function index()
+    {
+        $jobPosts = JobPost::where('is_approved', 1)->get();
+        return response()->json($jobPosts);
+    }
+    
+
     public function store(StoreJobPostRequest $request)
     {
-        $validatedData = $request->validated();
-        $jobPost = JobPost::create($validatedData);
-        return response()->json($jobPost, 201);
+
+      $validatedData = $request->validated();
+      $validatedData['is_approved'] = 0;
+      $jobPost = $request->user()->postedJobs()->create($validatedData);
+      return response()->json($jobPost, 201);
     }
 
-    public function show($id)
+    public function show($id) 
     {
         $jobPost = JobPost::findOrFail($id);
         return response()->json($jobPost);
@@ -117,7 +126,7 @@ class JobPostController extends Controller
         \Log::debug('Search Query: ' . $query->toSql());
       }
     
-      return $query->get();
+      return $query->where('is_approved', 1)->get();
     }
     
 

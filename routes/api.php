@@ -32,12 +32,16 @@ Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum')
 
 Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
-Route::get('jobs/search', [JobPostController::class, 'search']);
 Route::get('jobs', [JobPostController::class, 'index']);
+Route::get('jobs/unApproved', [JobPostController::class, 'unApproved']);
+Route::get('jobs/search', [JobPostController::class, 'search']);
+
+Route::post('jobs', [JobPostController::class, 'store']);
+
 Route::get('jobs/{id}', [JobPostController::class, 'show']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('jobs', JobPostController::class)->except(['index', 'show']);
-});
+Route::delete('jobs/{id}', [JobPostController::class, 'destroy']);
+Route::put('jobs/{id}', [JobPostController::class, 'update']);
+
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('industries', [IndustryController::class, 'index']);
