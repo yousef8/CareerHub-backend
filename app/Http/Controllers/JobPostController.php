@@ -19,7 +19,9 @@ class JobPostController extends Controller
 
     public function store(StoreJobPostRequest $request)
     {
-      $jobPost = $request->user()->postedJobs()->create($request->validated());
+      $validatedData = $request->validated();
+      $validatedData['is_approved'] = 0;
+      $jobPost = $request->user()->postedJobs()->create($validatedData);
       return response()->json($jobPost, 201);
     }
 
