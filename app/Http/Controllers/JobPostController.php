@@ -20,6 +20,9 @@ class JobPostController extends Controller
     public function index()
     {
         $jobPosts = JobPost::where('is_approved', 1)->get();
+        for($i = 0; $i < count($jobPosts); $i++) {
+            $jobPosts[$i]->applicants_count = $jobPosts[$i]->appliedUsers()->count();
+        }
         return response()->json($jobPosts);
     }
     
@@ -35,6 +38,8 @@ class JobPostController extends Controller
     public function show($id) 
     {
         $jobPost = JobPost::findOrFail($id);
+        $numberOfApplications = $jobPost->appliedUsers()->count();
+        $jobPost->applicants_count = $numberOfApplications;
         return response()->json($jobPost);
     }
 
