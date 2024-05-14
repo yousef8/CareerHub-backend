@@ -26,7 +26,6 @@ class JobPostController extends Controller
 
     public function store(StoreJobPostRequest $request)
     {
-
       $validatedData = $request->validated();
       $validatedData['is_approved'] = 0;
       $jobPost = $request->user()->postedJobs()->create($validatedData);
@@ -46,6 +45,14 @@ class JobPostController extends Controller
         $jobPost->update($validatedData);
         return response()->json($jobPost);
     }
+
+    public function approve(UpdateJobPostRequest $request, $id)
+    {
+        $jobPost = JobPost::findOrFail($id);
+        $jobPost->update(['is_approved' => 1]);
+        return response()->json($jobPost);
+    }
+
     
     public function destroy(Request $request,$id)
     {
