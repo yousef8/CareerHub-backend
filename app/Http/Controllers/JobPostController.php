@@ -41,6 +41,9 @@ class JobPostController extends Controller
     public function update(UpdateJobPostRequest $request, $id)
     {
         $jobPost = JobPost::findOrFail($id);
+        if($request->user()->id !== $jobPost->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
         $validatedData = $request->validated();
         $jobPost->update($validatedData);
         return response()->json($jobPost);
@@ -56,7 +59,10 @@ class JobPostController extends Controller
     
     public function destroy(Request $request,$id)
     {
-        $jobPost = JobPost::findOrFail($id);
+      $jobPost = JobPost::findOrFail($id);
+      if($request->user()->id !== $jobPost->user_id) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+      }
         $jobPost->delete();
         return response()->json(['message' => 'Job post deleted successfully']);
     }
