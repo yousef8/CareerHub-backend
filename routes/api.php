@@ -33,10 +33,12 @@ Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum')
 
 Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
+
 // unprotected routes
 Route::get('jobs', [JobPostController::class, 'index']);
 Route::get('jobs/search', [JobPostController::class, 'search']);
 Route::get('jobs/{id}', [JobPostController::class, 'show']);
+
 // protected routes
 Route::get('jobs/unApproved', [JobPostController::class, 'unApproved'])->middleware(['auth:sanctum', OnlyAdmin::class]);
 Route::put('jobs/approve/{id}', [JobPostController::class, 'approve'])->middleware(['auth:sanctum', OnlyAdmin::class]);
