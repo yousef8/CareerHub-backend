@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 
@@ -33,15 +32,16 @@ class RegisterController extends Controller
         );
 
         if ($request->hasFile('profile_image')) {
-            $validRequest['profile_image'] = '/storage/' . $request->file('profile_image')->store('profile-images', 'public');
+            $imageUrl = Cloudinary::upload($request->file('profile_image')->getRealPath())->getSecurePath();
+            $validRequest['profile_image'] = $imageUrl;
         }
 
         if ($request->hasFile('cover_image')) {
-            $validRequest['cover_image'] = '/storage/' . $request->file('cover_image')->store('cover-images', 'public');
+            $imageUrl = Cloudinary::upload($request->file('cover_image')->getRealPath())->getSecurePath();
+            $validRequest['cover_image'] = $imageUrl;
         }
 
         $user = User::create($validRequest);
-
         return response()->json($user, 201);
     }
 }

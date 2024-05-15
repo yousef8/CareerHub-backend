@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
@@ -21,11 +21,13 @@ class UserController extends Controller
         $validRequest = $request->validated();
 
         if ($request->hasFile('profile_image')) {
-            $validRequest['profile_image'] = '/storage/' . $request->file('profile_image')->store('profile-images', 'public');
+            $imageUrl = Cloudinary::upload($request->file('profile_image')->getRealPath())->getSecurePath();
+            $validRequest['profile_image'] = $imageUrl;
         }
 
         if ($request->hasFile('cover_image')) {
-            $validRequest['cover_image'] = '/storage/' . $request->file('cover_image')->store('cover-images', 'public');
+            $imageUrl = Cloudinary::upload($request->file('cover_image')->getRealPath())->getSecurePath();
+            $validRequest['cover_image'] = $imageUrl;
         }
 
         $user = User::create($validRequest);
