@@ -112,13 +112,19 @@ class JobPostController extends Controller
     return response()->json($jobPost);
   }
 
-  public function approve(UpdateJobPostRequest $request, $id)
+  public function approve(Request $request, $id)
   {
     $jobPost = JobPost::findOrFail($id);
     $jobPost->update(['status' => 'approved']);
     return response()->json($jobPost);
   }
 
+  public function reject(Request $request, $id)
+  {
+    $jobPost = JobPost::findOrFail($id);
+    $jobPost->update(['status' => 'rejected']);
+    return response()->json($jobPost);
+  }
 
   public function destroy(Request $request, $id)
   {
