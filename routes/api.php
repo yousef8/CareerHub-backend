@@ -61,9 +61,9 @@ Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
     Route::apiResource('industries', IndustryController::class)->except(['index', 'show']);
 });
 
-Route::get('applications', [ApplicationController::class, 'index'])->middleware(['auth:sanctum', OnlyCandidate::class]);
 
-Route::group(['middleware' => ['auth:sanctum', OnlyEmployer::class]], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('applications', [ApplicationController::class, 'index'])->middleware(['onlyAdmin']);
     Route::post('applications/{id}/approved', [ApplicationController::class, 'approve']);
     Route::post('applications/{id}/rejected', [ApplicationController::class, 'reject']);
 });
