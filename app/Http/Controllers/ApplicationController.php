@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ServerStatus;
 use App\Models\JobPost;
 use App\Models\Application;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
-use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ApplicationController extends Controller
 {
@@ -36,15 +35,18 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
+
     public function store(StoreApplicationRequest $request, $id)
     {
         $jobPost = JobPost::findOrFail($id);
         $validatedRequest = $request->validated();
 
         $resume = null;
+
         if ($request->hasFile('resume_path')) {
-            $resume = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
+            $resume = Cloudinary::uploadFile($request->file('resume_path')->getRealPath())->getSecurePath();
         }
+
         if ($request->user()->appliedJobs->contains($jobPost->id)) {
             return response()->json(['message' => 'You have already applied for this job post'], 422);
         }
@@ -54,6 +56,24 @@ class ApplicationController extends Controller
         return response()->json($application)->setStatusCode(201);
     }
 
+
+    public function update(UpdateApplicationRequest $request, Application $application)
+    {
+        $validated = $request->validated();
+
+        if ($request->hasFile('resume_path')) {
+            if ($application->resume_path) {
+                $resumePublicId = $this->extractResumePublicId($application->resume_path);
+                Cloudinary::destroy($resumePublicId);
+            }
+
+            $resumePath = Cloudinary::uploadFile($request->file('resume_path')->getRealPath())->getSecurePath();
+            $validated['resume_path'] = $resumePath;
+        }
+
+        $application->update($validated);
+        return response()->json($application);
+    }
 
     public function destroy(Request $request, $id)
     {
@@ -123,5 +143,12 @@ class ApplicationController extends Controller
         });
 
         return response()->json($applications);
+    }
+
+    private function extractResumePublicId($resumeUrl)
+    {
+        $parts = explode('/', $resumeUrl);
+        $lastPart = array_pop($parts);
+        return explode('.', $lastPart)[0];
     }
 }
