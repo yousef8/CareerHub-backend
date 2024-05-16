@@ -117,4 +117,13 @@ class ApplicationController extends Controller
 
         return response()->json($applications);
     }
+
+    public function candidateApplications(Request $request)
+    {
+        $applications = Application::where('user_id', $request->user()->id)->with('jobPost')->get()->each(function ($application) {
+            $application->makeHidden(['user_id', 'job_post_id']);
+        });
+
+        return response()->json($applications);
+    }
 }
