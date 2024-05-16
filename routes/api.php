@@ -30,9 +30,9 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 'onlyAdmin']);
 
 Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Important to have this before other job-posts route
-    Route::get('job-posts/pending', [JobPostController::class, 'unApproved']);
+    Route::get('job-posts/pending', [JobPostController::class, 'pendingPosts']);
+    Route::get('job-posts/rejected', [JobPostController::class, 'rejectedPosts']);
     Route::put('job-posts/{id}/approve', [JobPostController::class, 'approve']);
-    // Uncomment this line if you implement the reject method
     // Route::put('job-posts/{id}/reject', [JobPostController::class, 'reject']);
 });
 
