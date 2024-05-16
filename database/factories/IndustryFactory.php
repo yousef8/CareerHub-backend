@@ -11,11 +11,11 @@ use App\Models\Industry;
 class IndustryFactory extends Factory
 {
     protected $model = Industry::class;
-    
+
     public function definition(): array
     {
         return [
-            'name' => fake()->word,
+            'name' => fake()->unique()->word,
         ];
     }
 }
