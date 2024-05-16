@@ -78,6 +78,12 @@ class ApplicationController extends Controller
     public function destroy(Request $request, $id)
     {
         $application = Application::findOrFail($id);
+
+        if ($application->resume_path) {
+            $resumePublicId = $this->extractResumePublicId($application->resume_path);
+            Cloudinary::destroy($resumePublicId);
+        }
+
         $application->delete();
         return response()->json(['message' => 'application deleted'], 204);
     }
