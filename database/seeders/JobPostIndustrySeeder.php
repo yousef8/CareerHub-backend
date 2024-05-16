@@ -10,13 +10,13 @@ class JobPostIndustrySeeder extends Seeder
 {
     public function run()
     {
+        $jobPosts = JobPost::all();
         $industries = Industry::all();
 
-        foreach ($industries as $industry) {
-            $jobPostCount = rand(1, 5);
-            $existingJobPosts = JobPost::all()->random($jobPostCount);
-
-            $industry->jobs()->attach($existingJobPosts->pluck('id'));
+        foreach ($jobPosts as $jobPost) {
+            $jobPost->industries()->attach(
+                $industries->random(rand(1, 3))->pluck('id')->toArray()
+            );
         }
     }
 }
