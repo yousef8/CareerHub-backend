@@ -35,8 +35,9 @@ class UpdateJobPostRequest extends FormRequest
             'type' => 'sometimes|string|in:full-time,part-time,contract,freelance',
             'remote_type' => 'sometimes|string|in:remote,onsite,hybrid',
             'experience_level' => 'sometimes|string|in:entry_level,associate, mid-senior,director,executive',
-            'user_id' => 'sometimes|exists:users,id',
-            'status' => 'prohibited'
+            'status' => 'prohibited',
+            'user_id' => 'prohibited',
+            'job_post_id' => 'prohibited'
         ];
     }
 }
