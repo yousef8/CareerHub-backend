@@ -24,23 +24,12 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $this->user->id,
+            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $this->user()->id,
             'password' => 'sometimes|string|min:8',
             'phone_number' => ['sometimes', 'string', 'regex:/^01[0125][0-9]{8}$/'],
             'profile_image' => 'sometimes|image',
             'cover_image' => 'sometimes|image',
-            'role' => [
-                'sometimes',
-                'filled',
-                Rule::in(['employer', 'candidate', 'admin']),
-            ]
+            'role' => 'prohibited'
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        if ($this->filled('role')) {
-            $this->merge(['role' => strtolower($this->role),]);
-        }
     }
 }

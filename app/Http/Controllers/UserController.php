@@ -37,28 +37,28 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request)
     {
         $validRequest = $request->validated();
 
         if ($request->hasFile('profile_image')) {
             $validRequest['profile_image'] = '/storage/' . $request->file('profile_image')->store('profile-images', 'public');
 
-            if ($user->profile_image) {
-                Storage::disk('public')->delete('profile-images/' . basename($user->profile_image));
+            if ($request->user()->profile_image) {
+                Storage::disk('public')->delete('profile-images/' . basename($request->user()->profile_image));
             }
         }
 
         if ($request->hasFile('cover_image')) {
             $validRequest['cover_image'] = '/storage/' . $request->file('cover_image')->store('cover-images', 'public');
 
-            if ($user->profile_image) {
-                Storage::disk('public')->delete('cover-images/' . basename($user->cover_image));
+            if ($request->user()->profile_image) {
+                Storage::disk('public')->delete('cover-images/' . basename($request->user()->cover_image));
             }
         }
 
-        $user->update($validRequest);
-        return response()->json($user)->setStatusCode(200);
+        $request->user()->update($validRequest);
+        return response()->json($request->user())->setStatusCode(200);
     }
 
     public function destroy(User $user)
