@@ -31,7 +31,8 @@ class ApplicationController extends Controller
 
     public function show($id)
     {
-        $application = Application::findOrFail($id);
+        $application = Application::where('id', $id)->with('jobPost')->get();
+
         return response()->json($application);
     }
 
@@ -54,14 +55,11 @@ class ApplicationController extends Controller
     }
 
 
-    public function destroy($id, Request $request)
+    public function destroy(Request $request, $id)
     {
         $application = Application::findOrFail($id);
-        if ($request->user()->id !== $application->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
         $application->delete();
-        return response()->json(['message' => 'The application deleted'], 204);
+        return response()->json(['message' => 'application deleted'], 204);
     }
 
     public function approve(Request $request, $id)
