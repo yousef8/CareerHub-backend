@@ -32,8 +32,12 @@ class UserController extends Controller
         return response()->json($user)->setStatusCode(201);
     }
 
-    public function show(User $user)
+    public function show($id)
     {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'No user with such id'], 404);
+        }
         return response()->json($user);
     }
 
@@ -61,8 +65,12 @@ class UserController extends Controller
         return response()->json($request->user())->setStatusCode(200);
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'No user with such id'], 404);
+        }
         $user->deleteOrFail();
         return response()->json()->setStatusCode(204);
     }
