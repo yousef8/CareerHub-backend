@@ -24,9 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($request->user());
     });
     Route::post('user/logout', [LogoutController::class, 'logout']);
+    Route::put('user', [UserController::class, 'update']);
 });
 
-Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 'onlyAdmin']);
+// Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 'onlyAdmin']);
 
 Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Important to have this before other job-posts route
     Route::get('job-posts/pending', [JobPostController::class, 'pendingPosts']);
