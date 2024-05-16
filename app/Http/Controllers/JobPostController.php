@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreJobPostRequest;
 use App\Http\Requests\UpdateJobPostRequest;
+use App\Models\Application;
 use App\Models\JobPost;
 use App\Models\Skill;
 use App\Models\Industry;
@@ -225,5 +226,31 @@ class JobPostController extends Controller
     }
 
     return $query->where('status', 'approved')->get();
+  }
+
+
+  public function jobPostApplications(Request $request, $id)
+  {
+    $jobPost = JobPost::findOrFail($id);
+
+    $applications = $jobPost->appliedUsers()->withPivot('resume_path', 'status', 'id')->get();
+
+    $applications = $applications->map(function ($application) {
+      return [
+        'id' => $application->pivot->id,
+        'resume_path' => $application->pivot->resume_path,
+        'status' => $application->pivot->status,
+        'applied_at' => $application->pivot->created_at,
+        'user' => [
+          'id' => $application->id,
+          'name' => $application->name,
+          'email' => $application->email,
+          'phone_number' => $application->phone_number,
+          'profile_image' => $application->profile_image
+        ],
+      ];
+    });
+
+    return response()->json($applications);
   }
 }

@@ -40,7 +40,7 @@ class JobPost extends Model
 
     public function appliedUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'applications')->withPivot('resume_path', 'status')->withTimestamps();
+        return $this->belongsToMany(User::class, 'applications')->withPivot('resume_path', 'status', 'id')->withTimestamps();
     }
 
     public function industries(): BelongsToMany
