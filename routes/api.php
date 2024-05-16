@@ -27,13 +27,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('user', [UserController::class, 'update']);
 });
 
-// Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 'onlyAdmin']);
-
 Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Important to have this before other job-posts route
     Route::get('job-posts/pending', [JobPostController::class, 'pendingPosts']);
     Route::get('job-posts/rejected', [JobPostController::class, 'rejectedPosts']);
     Route::put('job-posts/{id}/approve', [JobPostController::class, 'approve']);
     Route::put('job-posts/{id}/reject', [JobPostController::class, 'reject']);
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
 });
 
 Route::get('job-posts', [JobPostController::class, 'index']);
