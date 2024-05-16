@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Middleware\OnlyAdmin;
 use App\Http\Middleware\OnlyEmployer;
+use App\Http\Middleware\OnlyCandidate;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
@@ -31,7 +32,7 @@ Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 
 
 Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum');
 
-Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
+// Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
 
 // unprotected routes
@@ -54,14 +55,14 @@ Route::group(['middleware' => ['auth:sanctum', OnlyAdmin::class]], function () {
 
 Route::get('applications', [ApplicationController::class, 'index'])->middleware(['auth:sanctum']);
 
-Route::group(['middleware' => onlyEmployer::class], function () {
+Route::group(['middleware' => ['auth:sanctum',OnlyEmployer::class]], function () {
 Route::post('applications/{id}/approved', [ApplicationController::class, 'approve']);
 Route::post('applications/{id}/rejected', [ApplicationController::class, 'reject']);
 });
-Route::post('applications', [ApplicationController::class, 'store'])->middleware(['auth:sanctum', OnlyCandidate::class]);
+Route::post('applications', [ApplicationController::class, 'store'])->middleware(['auth:sanctum']);
 
 Route::get('applications/{id}', [ApplicationController::class, 'show'])->middleware(['auth:sanctum']);
 
-Route::delete('applications/{id}', [ApplicationController::class, 'destroy'])->middleware(['auth:sanctum', OnlyCandidate::class]);
-Route::put('applications/{id}', [ApplicationController::class, 'update'])->middleware(['auth:sanctum', OnlyEmployer::class]);
+Route::delete('applications/{id}', [ApplicationController::class, 'destroy'])->middleware(['auth:sanctum']);
+Route::put('applications/{id}', [ApplicationController::class, 'update'])->middleware(['auth:sanctum']);
 
