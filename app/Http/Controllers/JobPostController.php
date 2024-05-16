@@ -253,4 +253,11 @@ class JobPostController extends Controller
 
     return response()->json($applications);
   }
+
+  public function employerJobPosts(Request $request)
+  {
+    $jobPosts = JobPost::where('user_id', $request->user()->id)
+      ->get();
+    return response()->json($jobPosts);
+  }
 }

@@ -45,14 +45,11 @@ Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
     Route::put('job-posts/{id}', [JobPostController::class, 'update'])->middleware(['onlyJobPostOwner']);
     Route::delete('job-posts/{id}', [JobPostController::class, 'destroy'])->middleware(['onlyJobPostOwner']);
     Route::get('job-posts/{id}/applications', [JobPostController::class, 'jobPostApplications'])->middleware(['onlyJobPostOwner']);
-    // Route::put('applications/{id}/approve', [ApplicationController::class, 'approve']);
-    // Route::put('applications/{id}/reject', [ApplicationController::class, 'reject']);
+    Route::get('employer/job-posts', [JobPostController::class, 'employerJobPosts']);
 });
 
 
 Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum');
-
-// Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
 Route::get('industries', [IndustryController::class, 'index']);
 Route::get('industries/{id}', [IndustryController::class, 'show']);
