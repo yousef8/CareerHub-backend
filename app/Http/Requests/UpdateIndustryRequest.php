@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateIndustryRequest extends FormRequest
 {
@@ -22,7 +23,12 @@ class UpdateIndustryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|regex:/^[a-zA-Z\s]+$/|max:255'
+            'name' => [
+                'required',
+                'regex:/^[a-zA-Z\s]+$/',
+                'max:255',
+                Rule::unique('industries', 'name')->ignore($this->industry)
+            ]
         ];
     }
 }
