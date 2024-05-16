@@ -32,11 +32,10 @@ class StoreJobPostRequest extends FormRequest
             'min_exp_years' => 'sometimes|integer|min:0',
             'max_exp_years' => 'sometimes|integer|min:0',
             'expires_at' => 'sometimes|date',
-            'is_approved' => 'required|boolean',
             'type' => 'required|string|in:full-time,part-time,contract,freelance',
             'remote_type' => 'required|string|in:remote,onsite,hybrid',
             'experience_level' => 'required|string|in:entry_level,associate, mid-senior,director,executive',
+            'status' => 'prohibited'
         ];
     }
-
 }

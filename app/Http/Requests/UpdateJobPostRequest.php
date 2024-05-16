@@ -32,12 +32,11 @@ class UpdateJobPostRequest extends FormRequest
             'min_exp_years' => 'sometimes|integer|min:0',
             'max_exp_years' => 'sometimes|integer|min:0',
             'expires_at' => 'sometimes|date',
-            'is_approved' => 'sometimes|boolean',
             'type' => 'sometimes|string|in:full-time,part-time,contract,freelance',
             'remote_type' => 'sometimes|string|in:remote,onsite,hybrid',
             'experience_level' => 'sometimes|string|in:entry_level,associate, mid-senior,director,executive',
             'user_id' => 'sometimes|exists:users,id',
+            'status' => 'prohibited'
         ];
-        
     }
 }
