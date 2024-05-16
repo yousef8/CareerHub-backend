@@ -64,26 +64,17 @@ class ApplicationController extends Controller
         return response()->json(['message' => 'The application deleted'], 204);
     }
 
-    public function approve(Application $application, UpdateApplicationRequest $request, $id)
+    public function approve(Request $request, $id)
     {
         $application = Application::findOrFail($id);
-        $jobPostId = $application->job_post_id;
-        $jobPost = JobPost::findOrFail($jobPostId);
-        if ($request->user()->id !== $jobPost->user_id) {
-            return response()->json(['PostOwner' => $jobPost->user_id, 'currentuser' => $request->user()->id], 403);
-        }
-        $application->update(['status' => 'accepted']);
+        $application->approve();
         return response()->json(['message' => 'Application approved']);
     }
+
     public function reject(Application $application, UpdateApplicationRequest $request, $id)
     {
         $application = Application::findOrFail($id);
-        $jobPostId = $application->job_post_id;
-        $jobPost = JobPost::findOrFail($jobPostId);
-        if ($request->user()->id !== $jobPost->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        $application->update(['status' => 'rejected']);
+        $application->reject();
         return response()->json(['message' => 'Application rejected']);
     }
 
