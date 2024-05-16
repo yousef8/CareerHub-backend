@@ -20,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(JobPost::class)->constrained()->cascadeOnDelete();
-            $table->string('resume_path');
+            $table->string('resume_path')->nullable();
             $table->enum('status', ['pending', 'rejected', 'accepted'])->default('pending');
             $table->unique(['job_post_id', 'user_id']);
             $table->timestamps();
