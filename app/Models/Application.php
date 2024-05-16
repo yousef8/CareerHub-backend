@@ -11,13 +11,13 @@ class Application extends Model
     protected $fillable = [
         'user_id', 'job_id', 'resume_path', 'status'
     ];
-
-    public function user()
+    public $incrementing = true;
+    public function applicant()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function job()
+    public function jobPost()
     {
         return $this->belongsTo(JobPost::class);
     }

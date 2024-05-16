@@ -44,8 +44,7 @@ Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
     Route::post('job-posts', [JobPostController::class, 'store']);
     Route::put('job-posts/{id}', [JobPostController::class, 'update'])->middleware(['onlyJobPostOwner']);
     Route::delete('job-posts/{id}', [JobPostController::class, 'destroy'])->middleware(['onlyJobPostOwner']);
-    // Uncomment these lines if you implement these methods
-    // Route::get('job-posts/{id}/applications', [ApplicationController::class, 'jobApplications']);
+    Route::get('job-posts/{id}/applications', [JobPostController::class, 'jobPostApplications'])->middleware(['onlyJobPostOwner']);
     // Route::get('employer/applications', [ApplicationController::class, 'employerApplications']);
     // Route::put('applications/{id}/approve', [ApplicationController::class, 'approve']);
     // Route::put('applications/{id}/reject', [ApplicationController::class, 'reject']);
