@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreJobPostRequest;
 use App\Http\Requests\UpdateJobPostRequest;
 use App\Models\JobPost;
+use App\Models\Skill;
+use App\Models\Industry;
 
 
 class JobPostController extends Controller
@@ -25,15 +27,38 @@ class JobPostController extends Controller
         }
         return response()->json($jobPosts);
     }
-    
 
     public function store(StoreJobPostRequest $request)
-    {
-      $validatedData = $request->validated();
-      $validatedData['is_approved'] = 0;
-      $jobPost = $request->user()->postedJobs()->create($validatedData);
-      return response()->json($jobPost, 201);
+{
+    $validatedData = $request->validated();
+    $validatedData['is_approved'] = 0;
+    $requestSkills = explode(',',$request->skills);
+    $requestIndustries = explode(',',$request->industries);
+    $skillIds = [];
+    $industryIds = [];
+
+    foreach ($requestSkills as $skillName) {
+      $skill = Skill::where('name', strtolower($skillName))->first();
+      if (!$skill) {
+          $skill = Skill::create(['name' => strtolower($skillName)]);
+      }
+      $skillIds[] = $skill->id;
     }
+
+    foreach ($requestIndustries as $industryName) {
+      $industry = Industry::where('name', strtolower($industryName))->first();
+      if (!$industry) {
+          $industry = Industry::create(['name' => strtolower($industryName)]);
+      }
+      $industryIds[] = $industry->id;
+    }
+
+    $jobPost = $request->user()->postedJobs()->create($validatedData);
+    $jobPost->skills()->attach($skillIds);
+    $jobPost->industries()->attach($industryIds);
+    return response()->json($jobPost, 201);
+}
+
 
     public function show($id) 
     {
@@ -51,6 +76,30 @@ class JobPostController extends Controller
         }
         $validatedData = $request->validated();
         $jobPost->update($validatedData);
+
+        $requestSkills = explode(',',$request->skills);
+        $requestIndustries = explode(',',$request->industries);
+        $skillIds = [];
+        $industryIds = [];
+
+        foreach ($requestSkills as $skillName) {
+          $skill = Skill::where('name', strtolower($skillName))->first();
+          if (!$skill) {
+              $skill = Skill::create(['name' => strtolower($skillName)]);
+          }
+          $skillIds[] = $skill->id;
+        }
+    
+        foreach ($requestIndustries as $industryName) {
+          $industry = Industry::where('name', strtolower($industryName))->first();
+          if (!$industry) {
+              $industry = Industry::create(['name' => strtolower($industryName)]);
+          }
+          $industryIds[] = $industry->id;
+        }
+
+        $jobPost->skills()->sync($skillIds);
+        $jobPost->industries()->sync($industryIds);
         return response()->json($jobPost);
     }
 
