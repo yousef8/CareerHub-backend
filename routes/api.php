@@ -45,7 +45,6 @@ Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
     Route::put('job-posts/{id}', [JobPostController::class, 'update'])->middleware(['onlyJobPostOwner']);
     Route::delete('job-posts/{id}', [JobPostController::class, 'destroy'])->middleware(['onlyJobPostOwner']);
     Route::get('job-posts/{id}/applications', [JobPostController::class, 'jobPostApplications'])->middleware(['onlyJobPostOwner']);
-    Route::get('employer/applications', [ApplicationController::class, 'applicationsSubmittedToEmployer']);
     // Route::put('applications/{id}/approve', [ApplicationController::class, 'approve']);
     // Route::put('applications/{id}/reject', [ApplicationController::class, 'reject']);
 });
@@ -62,11 +61,13 @@ Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
 });
 
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('applications', [ApplicationController::class, 'index'])->middleware(['onlyAdmin']);
-    Route::post('applications/{id}/approved', [ApplicationController::class, 'approve']);
-    Route::post('applications/{id}/rejected', [ApplicationController::class, 'reject']);
+    Route::get('employer/applications', [ApplicationController::class, 'applicationsSubmittedToEmployer'])->middleware(['onlyEmployer']);
+    Route::put('applications/{id}/approve', [ApplicationController::class, 'approve'])->middleware(['onlyApplicationEmployer']);
+    Route::put('applications/{id}/reject', [ApplicationController::class, 'reject'])->middleware(['onlyApplicationEmployer']);
 });
+
 Route::post('applications', [ApplicationController::class, 'store'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);
 
 Route::get('applications/{id}', [ApplicationController::class, 'show'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);
