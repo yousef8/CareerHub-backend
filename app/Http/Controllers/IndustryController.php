@@ -39,6 +39,6 @@ class IndustryController extends Controller
     {
         $industry = Industry::findOrFail($id);
         $industry->delete();
-        return response()->json(['message' => 'Industry deleted successfully']);
+        return response()->json(['message' => 'Industry deleted successfully'], 204);
     }
 }
