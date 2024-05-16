@@ -15,7 +15,17 @@ class ApplicationController extends Controller
 
     public function index()
     {
-        $applications = Application::all();
+        $applications = Application::with('applicant', 'jobPost')->get();
+        $applications->each(function ($application) {
+            $application->makeHidden(['user_id', 'job_post_id']);
+            if ($application->applicant) {
+                $application->applicant->makeHidden(['pivot', 'email_verified_at', 'updated_at', 'created_at']); // Hide pivot if exists
+            }
+            if ($application->jobPost) {
+                $application->jobPost->makeHidden(['user_id', 'created_at', 'updated_at']);
+            }
+        });
+
         return response()->json($applications);
     }
 
