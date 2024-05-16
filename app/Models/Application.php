@@ -14,11 +14,11 @@ class Application extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function job()
     {
-        return $this->belongsToMany(JobPost::class);
+        return $this->belongsTo(JobPost::class);
     }
 }

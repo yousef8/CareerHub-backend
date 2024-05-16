@@ -30,7 +30,7 @@ class ApplicationSeeder extends Seeder
 
 
         foreach ($users as $user) {
-            $attachedJobPosts = $jobPosts->random(rand(0, 3));
+            $attachedJobPosts = $jobPosts->random(rand(2, 3));
 
             $user->appliedJobs()->attach($attachedJobPosts, [
                 'resume_path' => '/storage/candidate-resumes/' . fake()->word . '.pdf',
