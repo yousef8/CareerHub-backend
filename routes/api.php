@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\JobPostSkillController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IndustryController;
@@ -11,8 +10,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Middleware\OnlyEmployer;
-use App\Http\Middleware\OnlyCandidate;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
@@ -51,7 +48,11 @@ Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
 });
 
 
-Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum');
+Route::get('skills', [SkillController::class, 'index']);
+Route::get('skills/{id}', [SkillController::class, 'show']);
+Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
+    Route::apiResource('skills', SkillController::class)->except(['index', 'show']);
+});
 
 Route::get('industries', [IndustryController::class, 'index']);
 Route::get('industries/{id}', [IndustryController::class, 'show']);
