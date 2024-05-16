@@ -21,11 +21,11 @@ class JobPost extends Model
         'min_exp_years',
         'max_exp_years',
         'expires_at',
-        'is_approved',
         'type',
         'remote_type',
         'experience_level',
         'user_id',
+        'status'
     ];
 
     public function employer(): BelongsTo

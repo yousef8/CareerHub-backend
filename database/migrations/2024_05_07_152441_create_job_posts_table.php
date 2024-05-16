@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('min_exp_years')->nullable();
             $table->unsignedTinyInteger('max_exp_years')->nullable();
             $table->dateTime('expires_at')->nullable();
-            $table->boolean('is_approved')->default(false);
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->enum('type', ['full-time', 'part-time', 'contract']);
             $table->enum('remote_type', ['on-site', 'hybrid', 'remote']);
             $table->enum('experience_level', ['entry_level', 'associate', 'mid-senior', 'director', 'executive']);

@@ -28,10 +28,10 @@ class JobPostFactory extends Factory
             'min_exp_years' => fake()->numberBetween(1, 3),
             'max_exp_years' => fake()->numberBetween(4, 10),
             'expires_at' => Carbon::now()->addDays(fake()->numberBetween(30, 180)),
-            'is_approved' => fake()->boolean,
             'type' => fake()->randomElement(['full-time', 'part-time', 'contract']),
             'remote_type' => fake()->randomElement(['on-site', 'hybrid', 'remote']),
             'experience_level' => fake()->randomElement(['entry_level', 'associate', 'mid-senior', 'director', 'executive']),
+            'status' => fake()->randomElement(['pending', 'approved', 'rejected']),
         ];
     }
 }
