@@ -220,56 +220,6 @@ class JobPostController extends Controller
       });
     }
 
-    if ($city) {
-      $query->where('city', 'LIKE', "%{$city}%");
-    }
-
-    if ($country) {
-      $query->where('country', 'LIKE', "%{$country}%");
-    }
-
-
-    if ($category) {
-      $query->where('category', $category);
-    }
-
-
-    if ($experienceLevel) {
-      $query->where('experience_level', $experienceLevel);
-    }
-
-
-    if ($minSalary) {
-      $minSalary = intval($minSalary);
-      $query->where('min_salary', '>=', $minSalary);
-    }
-
-    if ($maxSalary) {
-      $maxSalary = intval($maxSalary);
-      $query->where('max_salary', '<=', $maxSalary);
-    }
-
-
-    if ($postedAfter) {
-      $query->whereDate('created_at', '>=', $postedAfter);
-    }
-
-    if ($skills) {
-      $query->with('skills');
-      $requiredSkills = explode(' ', $skills);
-      $query->whereHas('skills', function ($query) use ($requiredSkills) {
-        $query->whereIn('name', $requiredSkills);
-      });
-    }
-
-    if ($industries) {
-      $query->with('industries');
-      $Industries = explode(' ', $industries);
-      $query->whereHas('industries', function ($query) use ($Industries) {
-        $query->whereIn('name', $Industries);
-      });
-    }
-
     if (config('app.debug')) {
       \Log::debug('Search Query: ' . $query->toSql());
     }
