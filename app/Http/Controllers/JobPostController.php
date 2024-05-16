@@ -12,9 +12,15 @@ use App\Models\Industry;
 
 class JobPostController extends Controller
 {
-  public function unApproved()
+  public function pendingPosts()
   {
     $jobPosts = JobPost::where('status', 'pending')->get();
+    return response()->json($jobPosts);
+  }
+
+  public function rejectedPosts()
+  {
+    $jobPosts = JobPost::where('status', 'rejected')->get();
     return response()->json($jobPosts);
   }
 
