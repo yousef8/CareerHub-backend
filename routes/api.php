@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Importa
     Route::get('job-posts/pending', [JobPostController::class, 'pendingPosts']);
     Route::get('job-posts/rejected', [JobPostController::class, 'rejectedPosts']);
     Route::put('job-posts/{id}/approve', [JobPostController::class, 'approve']);
-    // Route::put('job-posts/{id}/reject', [JobPostController::class, 'reject']);
+    Route::put('job-posts/{id}/reject', [JobPostController::class, 'reject']);
 });
 
 Route::get('job-posts', [JobPostController::class, 'index']);
