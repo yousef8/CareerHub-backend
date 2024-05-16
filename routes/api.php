@@ -63,9 +63,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('employer/applications', [ApplicationController::class, 'applicationsSubmittedToEmployer'])->middleware(['onlyEmployer']);
     Route::put('applications/{id}/approve', [ApplicationController::class, 'approve'])->middleware(['onlyApplicationEmployer']);
     Route::put('applications/{id}/reject', [ApplicationController::class, 'reject'])->middleware(['onlyApplicationEmployer']);
+    Route::post('job-posts/{id}/applications', [ApplicationController::class, 'store'])->middleware(['onlyCandidate']);
 });
 
-Route::post('applications', [ApplicationController::class, 'store'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);
 
 Route::get('applications/{id}', [ApplicationController::class, 'show'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);
 

@@ -35,20 +35,20 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
-    public function store(StoreApplicationRequest $request)
+    public function store(StoreApplicationRequest $request, $id)
     {
-        $validated = $request->validated();
+        $jobPost = JobPost::findOrFail($id);
+        $validatedRequest = $request->validated();
 
-        if (!$request->hasFile('resume_path')) {
-            return response()->json(['error' => 'Please upload a resume.'], 400);
+        $resume = null;
+        if ($request->hasFile('resume_path')) {
+            $resume = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
+        }
+        if ($request->user()->appliedJobs->contains($jobPost->id)) {
+            return response()->json(['message' => 'You have already applied for this job post'], 422);
         }
 
-        // Store the resume file
-        $resumePath = '/storage/candidate-resumes/' . $request->file('resume_path')->store('resumes', 'public');
-        $validated['resume_path'] = $resumePath;
-
-        // Create and save the application
-        $application = Application::create($validated);
+        $application = $jobPost->applications()->create(['resume_path' => $resume, 'user_id' => $request->user()->id]);
 
         return response()->json($application)->setStatusCode(201);
     }
