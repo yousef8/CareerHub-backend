@@ -77,7 +77,8 @@ class JobPostController extends Controller
         $keywords = $request->get('keywords');
         $city = $request->get('city'); 
         $country = $request->get('country'); 
-        $category = $request->get('category');
+        $type = $request->get('type');
+        $remote_type = $request->get('remote_type');
         $experienceLevel = $request->get('experience_level');
         $minSalary = $request->get('min_salary');
         $maxSalary = $request->get('max_salary');
@@ -85,12 +86,12 @@ class JobPostController extends Controller
         $skills = $request->get('skills');
         $industries = $request->get('industries');
 
-        $jobs = $this->buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
+        $jobs = $this->buildSearchQuery($keywords, $city, $country,$type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
 
         return response()->json($jobs);
     }
 
-    private function buildSearchQuery($keywords, $city, $country, $category, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries)
+    private function buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries)
     {
       $query = JobPost::query();
     
@@ -116,8 +117,12 @@ class JobPostController extends Controller
         }
         
 
-      if ($category) {
-        $query->where('category', $category); 
+      if ($remote_type) {
+        $query->where('remote_type', $remote_type); 
+      }
+
+      if ($type) {
+        $query->where('type', $type); 
       }
     
   
