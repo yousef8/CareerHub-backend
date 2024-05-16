@@ -11,7 +11,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Middleware\OnlyAdmin;
 use App\Http\Middleware\OnlyEmployer;
 use App\Http\Middleware\OnlyCandidate;
 
@@ -43,8 +42,8 @@ Route::get('job-posts/search', [JobPostController::class, 'search']);
 
 Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
     Route::post('job-posts', [JobPostController::class, 'store']);
-    Route::put('job-posts/{id}', [JobPostController::class, 'update']);
-    Route::delete('job-posts/{id}', [JobPostController::class, 'destroy']);
+    Route::put('job-posts/{id}', [JobPostController::class, 'update'])->middleware(['onlyJobPostOwner']);
+    Route::delete('job-posts/{id}', [JobPostController::class, 'destroy'])->middleware(['onlyJobPostOwner']);
     // Uncomment these lines if you implement these methods
     // Route::get('job-posts/{id}/applications', [ApplicationController::class, 'jobApplications']);
     // Route::get('employer/applications', [ApplicationController::class, 'employerApplications']);
@@ -63,11 +62,11 @@ Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
     Route::apiResource('industries', IndustryController::class)->except(['index', 'show']);
 });
 
-Route::get('applications', [ApplicationController::class, 'index'])->middleware(['auth:sanctum',OnlyCandidate::class]);
+Route::get('applications', [ApplicationController::class, 'index'])->middleware(['auth:sanctum', OnlyCandidate::class]);
 
-Route::group(['middleware' => ['auth:sanctum',OnlyEmployer::class]], function () {
-Route::post('applications/{id}/approved', [ApplicationController::class, 'approve']);
-Route::post('applications/{id}/rejected', [ApplicationController::class, 'reject']);
+Route::group(['middleware' => ['auth:sanctum', OnlyEmployer::class]], function () {
+    Route::post('applications/{id}/approved', [ApplicationController::class, 'approve']);
+    Route::post('applications/{id}/rejected', [ApplicationController::class, 'reject']);
 });
 Route::post('applications', [ApplicationController::class, 'store'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);
 
