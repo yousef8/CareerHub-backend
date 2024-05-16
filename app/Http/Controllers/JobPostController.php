@@ -24,6 +24,8 @@ class JobPostController extends Controller
         $jobPosts = JobPost::where('is_approved', 1)->get();
         for($i = 0; $i < count($jobPosts); $i++) {
             $jobPosts[$i]->applicants_count = $jobPosts[$i]->appliedUsers()->count();
+            $jobPosts[$i]->skills = join(',', $jobPosts[$i]->skills->pluck('id', 'name')->toArray());
+            $jobPosts[$i]->industries = join(',', $jobPosts[$i]->industries->pluck('id', 'name')->toArray());
         }
         return response()->json($jobPosts);
     }
@@ -65,6 +67,8 @@ class JobPostController extends Controller
         $jobPost = JobPost::findOrFail($id);
         $numberOfApplications = $jobPost->appliedUsers()->count();
         $jobPost->applicants_count = $numberOfApplications;
+        $jobPost->skills = join(',', $jobPost->skills->pluck('id', 'name')->toArray());
+        $jobPost->industries = join(',', $jobPost->industries->pluck('id', 'name')->toArray());
         return response()->json($jobPost);
     }
 
