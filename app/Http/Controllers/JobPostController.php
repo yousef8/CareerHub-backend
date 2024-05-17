@@ -15,13 +15,18 @@ class JobPostController extends Controller
 {
   public function pendingPosts()
   {
-    $jobPosts = JobPost::where('status', 'pending')->get();
+    $jobPosts = JobPost::where('status', 'pending')->with('employer')->get()->each(function ($jobPost) {
+      $jobPost->makeHidden(['user_id']);
+    });
     return response()->json($jobPosts);
   }
 
   public function rejectedPosts()
   {
-    $jobPosts = JobPost::where('status', 'rejected')->get();
+    $jobPosts = JobPost::where('status', 'rejected')->with('employer')->get()->each(function ($jobPost) {
+      $jobPost->makeHidden(['user_id']);
+    });
+
     return response()->json($jobPosts);
   }
 
@@ -132,23 +137,23 @@ class JobPostController extends Controller
   }
 
   public function search(Request $request)
-    {
-      $keywords = $request->get('keywords');
-      $city = $request->get('city');
-      $country = $request->get('country');
-      $type = $request->get('type');
-      $remote_type = $request->get('remote_type');
-      $experienceLevel = $request->get('experience_level');
-      $minSalary = $request->get('min_salary');
-      $maxSalary = $request->get('max_salary');
-      $postedAfter = $request->get('posted_after');
-      $skills = $request->get('skills');
-      $industries = $request->get('industries');
+  {
+    $keywords = $request->get('keywords');
+    $city = $request->get('city');
+    $country = $request->get('country');
+    $type = $request->get('type');
+    $remote_type = $request->get('remote_type');
+    $experienceLevel = $request->get('experience_level');
+    $minSalary = $request->get('min_salary');
+    $maxSalary = $request->get('max_salary');
+    $postedAfter = $request->get('posted_after');
+    $skills = $request->get('skills');
+    $industries = $request->get('industries');
 
-      $jobs = $this->buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
+    $jobs = $this->buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
 
-      return response()->json($jobs);
-    }
+    return response()->json($jobs);
+  }
 
 
   private function buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries)
@@ -275,6 +280,4 @@ class JobPostController extends Controller
       'industries' => $industries
     ]);
   }
-
-
 }
