@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\JobPostSkillController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IndustryController;
@@ -11,8 +10,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Middleware\OnlyEmployer;
-use App\Http\Middleware\OnlyCandidate;
 
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
@@ -24,15 +21,17 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($request->user());
     });
     Route::post('user/logout', [LogoutController::class, 'logout']);
+    Route::put('user', [UserController::class, 'update']);
 });
-
-Route::apiResource('users', UserController::class)->middleware(['auth:sanctum', 'onlyAdmin']);
 
 Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Important to have this before other job-posts route
     Route::get('job-posts/pending', [JobPostController::class, 'pendingPosts']);
     Route::get('job-posts/rejected', [JobPostController::class, 'rejectedPosts']);
     Route::put('job-posts/{id}/approve', [JobPostController::class, 'approve']);
     Route::put('job-posts/{id}/reject', [JobPostController::class, 'reject']);
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
 });
 
 Route::get('job-posts', [JobPostController::class, 'index']);
@@ -49,7 +48,11 @@ Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
 });
 
 
-Route::apiResource('skills', SkillController::class)->middleware('auth:sanctum');
+Route::get('skills', [SkillController::class, 'index']);
+Route::get('skills/{id}', [SkillController::class, 'show']);
+Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
+    Route::apiResource('skills', SkillController::class)->except(['index', 'show']);
+});
 
 // Route::apiResource('applications', ApplicationController::class)->middleware('auth:sanctum');
 
@@ -76,12 +79,10 @@ Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('applications', [ApplicationController::class, 'index'])->middleware(['onlyAdmin']);
     Route::get('employer/applications', [ApplicationController::class, 'applicationsSubmittedToEmployer'])->middleware(['onlyEmployer']);
+    Route::get('candidate/applications', [ApplicationController::class, 'candidateApplications'])->middleware(['onlyCandidate']);
     Route::put('applications/{id}/approve', [ApplicationController::class, 'approve'])->middleware(['onlyApplicationEmployer']);
     Route::put('applications/{id}/reject', [ApplicationController::class, 'reject'])->middleware(['onlyApplicationEmployer']);
     Route::post('job-posts/{id}/applications', [ApplicationController::class, 'store'])->middleware(['onlyCandidate']);
+    Route::get('applications/{id}', [ApplicationController::class, 'show'])->middleware(['applicationCandidateOrEmployerOrAdmin']);
+    Route::delete('applications/{id}', [ApplicationController::class, 'destroy'])->middleware(['onlyApplicationCandidate']);
 });
-
-
-Route::get('applications/{id}', [ApplicationController::class, 'show'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);
-
-Route::delete('applications/{id}', [ApplicationController::class, 'destroy'])->middleware(['auth:sanctum'])->middleware([OnlyCandidate::class]);

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\ApplicationCandidateOrEmployerOrAdmin;
 use App\Http\Middleware\OnlyAdmin;
+use App\Http\Middleware\OnlyApplicationCandidate;
 use App\Http\Middleware\OnlyApplicationEmployer;
 use App\Http\Middleware\OnlyCandidate;
 use App\Http\Middleware\OnlyEmployer;
@@ -30,7 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'onlyEmployer' => OnlyEmployer::class,
             'onlyCandidate' => OnlyCandidate::class,
             'onlyJobPostOwner' => OnlyJobPostOwner::class,
-            'onlyApplicationEmployer' => OnlyApplicationEmployer::class
+            'onlyApplicationEmployer' => OnlyApplicationEmployer::class,
+            'onlyApplicationCandidate' => OnlyApplicationCandidate::class,
+            'applicationCandidateOrEmployerOrAdmin' => ApplicationCandidateOrEmployerOrAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
