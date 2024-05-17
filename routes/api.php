@@ -49,7 +49,7 @@ Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {
 
 
 Route::get('skills', [SkillController::class, 'index']);
-Route::get('skills/{id}', [SkillController::class, 'show']);
+Route::get('skills/{skill}', [SkillController::class, 'show']);
 Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () {
     Route::apiResource('skills', SkillController::class)->except(['index', 'show']);
 });
