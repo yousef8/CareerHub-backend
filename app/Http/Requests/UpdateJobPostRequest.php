@@ -22,19 +22,19 @@ class UpdateJobPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'sometimes|string|max:255',
-            'description' => 'sometimes|string',
-            'requirements' => 'sometimes|string',
-            'city' => 'sometimes|string|max:255',
-            'country' => 'sometimes|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'required|string',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
             'min_salary' => 'sometimes|numeric|min:0',
             'max_salary' => 'sometimes|numeric|min:0',
             'min_exp_years' => 'sometimes|integer|min:0',
             'max_exp_years' => 'sometimes|integer|min:0',
             'expires_at' => 'sometimes|date',
-            'type' => 'sometimes|string|in:full-time,part-time,contract,freelance',
-            'remote_type' => 'sometimes|string|in:remote,onsite,hybrid',
-            'experience_level' => 'sometimes|string|in:entry_level,associate, mid-senior,director,executive',
+            'type' => 'required|string|in:full-time,part-time,contract,freelance',
+            'remote_type' => 'required|string|in:on-site,hybrid,remote',
+            'experience_level' => 'required|string|in:entry_level,associate,mid-senior,director,executive',
             'status' => 'prohibited',
             'user_id' => 'prohibited',
             'job_post_id' => 'prohibited'
