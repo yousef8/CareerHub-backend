@@ -12,6 +12,6 @@ class SkillSeeder extends Seeder
      */
     public function run(): void
     {
-        Skill::factory()->count(90)->create();
+        Skill::factory()->count(45)->create();
     }
 }

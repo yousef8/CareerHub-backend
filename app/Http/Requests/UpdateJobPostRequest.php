@@ -22,7 +22,7 @@ class UpdateJobPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'sometimes|string|max:255',
+            'title' => 'sometimes|string|filled|max:255',
             'description' => 'sometimes|string',
             'requirements' => 'sometimes|string',
             'city' => 'sometimes|string|max:255',
@@ -33,8 +33,8 @@ class UpdateJobPostRequest extends FormRequest
             'max_exp_years' => 'sometimes|integer|min:0',
             'expires_at' => 'sometimes|date',
             'type' => 'sometimes|string|in:full-time,part-time,contract,freelance',
-            'remote_type' => 'sometimes|string|in:remote,onsite,hybrid',
-            'experience_level' => 'sometimes|string|in:entry_level,associate, mid-senior,director,executive',
+            'remote_type' => 'sometimes|string|in:on-site,hybrid,remote',
+            'experience_level' => 'sometimes|string|in:entry_level,associate,mid-senior,director,executive',
             'status' => 'prohibited',
             'user_id' => 'prohibited',
             'job_post_id' => 'prohibited'
