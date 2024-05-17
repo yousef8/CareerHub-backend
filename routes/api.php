@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IndustryController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
+use Cloudinary\Asset\Analytics;
 
 Route::get('params', [JobPostController::class, 'filterParams']);
 Route::post('login', [LoginController::class, 'login']);
@@ -26,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Important to have this before other job-posts route
+    Route::get('analytics', [AnalyticsController::class, 'getAnalytics']);
     Route::get('job-posts/pending', [JobPostController::class, 'pendingPosts']);
     Route::get('job-posts/rejected', [JobPostController::class, 'rejectedPosts']);
     Route::put('job-posts/{id}/approve', [JobPostController::class, 'approve']);
