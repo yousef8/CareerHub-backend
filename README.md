@@ -33,10 +33,8 @@ RESTful API backend using Laravel
     php artisan db:seed
     ```
 
-*   Link Storage [For uploading images successfully]
+*   Add your cloudinary credentials to upload images and CVs
 
-    ```bash
-    php artisan storage:link
-    ```
+    You will find the necessary environment variables you need to fill in the .env.example file
 
 -   Enjoy ^\_^
