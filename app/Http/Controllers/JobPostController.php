@@ -263,7 +263,9 @@ class JobPostController extends Controller
   public function employerJobPosts(Request $request)
   {
     $jobPosts = JobPost::where('user_id', $request->user()->id)
-      ->get();
+      ->get()->each(function ($jobPost) {
+        $jobPost->applicants_count = $jobPost->appliedUsers()->count();
+      });
     return response()->json($jobPosts);
   }
 
