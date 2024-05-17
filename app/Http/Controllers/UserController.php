@@ -67,8 +67,8 @@ class UserController extends Controller
             $validRequest['cover_image'] = $imageUrl;
         }
 
-        $request->user->update($validRequest);
-        return response()->json($request->user);
+        $request->user()->update($validRequest);
+        return response()->json($request->user());
     }
 
     public function destroy($id)
