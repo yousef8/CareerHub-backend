@@ -129,6 +129,12 @@ class JobPostController extends Controller
     return response()->json($jobPost);
   }
 
+  public function pend(Request $request, $id)
+  {
+    $jobPost = JobPost::findOrFail($id);
+    $jobPost->update(['status' => 'pending']);
+    return response()->json($jobPost);
+  }
   public function destroy(Request $request, $id)
   {
     $jobPost = JobPost::findOrFail($id);
