@@ -17,7 +17,7 @@ class JobPostSeeder extends Seeder
         $employers = User::where('role', 'employer')->get();
 
         $employers->each(function ($employer) {
-            $employer->postedJobs()->saveMany(JobPost::factory()->count(rand(0, 5))->make());
+            $employer->postedJobs()->saveMany(JobPost::factory()->count(rand(0, 10))->make());
         });
     }
 }
