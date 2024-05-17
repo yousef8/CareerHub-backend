@@ -11,6 +11,7 @@ use App\Http\Controllers\JobPostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 
+Route::get('params', [JobPostController::class, 'filterParams'] );
 Route::post('login', [LoginController::class, 'login']);
 Route::post('register', [RegisterController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
@@ -34,9 +35,9 @@ Route::middleware(['auth:sanctum', 'onlyAdmin'])->group(function () { // Importa
     Route::delete('users/{id}', [UserController::class, 'destroy']);
 });
 
+Route::get('job-posts/search', [JobPostController::class, 'search']);
 Route::get('job-posts', [JobPostController::class, 'index']);
 Route::get('job-posts/{id}', [JobPostController::class, 'show']);
-Route::get('job-posts/search', [JobPostController::class, 'search']);
 
 
 Route::middleware(['auth:sanctum', 'onlyEmployer'])->group(function () {

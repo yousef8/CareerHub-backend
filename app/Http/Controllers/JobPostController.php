@@ -132,23 +132,24 @@ class JobPostController extends Controller
   }
 
   public function search(Request $request)
-  {
-    $keywords = $request->get('keywords');
-    $city = $request->get('city');
-    $country = $request->get('country');
-    $type = $request->get('type');
-    $remote_type = $request->get('remote_type');
-    $experienceLevel = $request->get('experience_level');
-    $minSalary = $request->get('min_salary');
-    $maxSalary = $request->get('max_salary');
-    $postedAfter = $request->get('posted_after');
-    $skills = $request->get('skills');
-    $industries = $request->get('industries');
+    {
+      $keywords = $request->get('keywords');
+      $city = $request->get('city');
+      $country = $request->get('country');
+      $type = $request->get('type');
+      $remote_type = $request->get('remote_type');
+      $experienceLevel = $request->get('experience_level');
+      $minSalary = $request->get('min_salary');
+      $maxSalary = $request->get('max_salary');
+      $postedAfter = $request->get('posted_after');
+      $skills = $request->get('skills');
+      $industries = $request->get('industries');
 
-    $jobs = $this->buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
+      $jobs = $this->buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries);
 
-    return response()->json($jobs);
-  }
+      return response()->json($jobs);
+    }
+
 
   private function buildSearchQuery($keywords, $city, $country, $type, $remote_type, $experienceLevel, $minSalary, $maxSalary, $postedAfter, $skills, $industries)
   {
@@ -260,4 +261,20 @@ class JobPostController extends Controller
       ->get();
     return response()->json($jobPosts);
   }
+
+  public function filterParams()
+  {
+    $cities = JobPost::distinct()->pluck('city');
+    $countries = JobPost::distinct()->pluck('country');
+    $skills = Skill::pluck('name')->toArray();
+    $industries = Industry::pluck('name')->toArray();
+    return response()->json([
+      'cities' => $cities,
+      'countries' => $countries,
+      'skills' => $skills,
+      'industries' => $industries
+    ]);
+  }
+
+
 }
