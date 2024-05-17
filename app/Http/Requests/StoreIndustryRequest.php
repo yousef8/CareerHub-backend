@@ -22,7 +22,7 @@ class StoreIndustryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|regex:/^[a-zA-Z\s]+$/|max:255'
+            'name' => ['required', 'regex:/^[a-zA-Z\s]+$/', 'max:255', 'unique:industries,name']
         ];
     }
 }

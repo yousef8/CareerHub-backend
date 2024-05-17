@@ -17,7 +17,7 @@ class OnlyCandidate
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::user() || !$request->user()->isCandidate()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Only candidate can preform this operation'], 403);
         }
         return $next($request);
     }

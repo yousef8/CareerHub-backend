@@ -17,7 +17,7 @@ class OnlyEmployer
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::user() || !$request->user()->isEmployer()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Only employer can preform this operation'], 403);
         }
         return $next($request);
     }

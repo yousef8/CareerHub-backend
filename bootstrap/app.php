@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Middleware\OnlyAdmin;
+use App\Http\Middleware\OnlyApplicationEmployer;
+use App\Http\Middleware\OnlyCandidate;
+use App\Http\Middleware\OnlyEmployer;
+use App\Http\Middleware\OnlyJobPostOwner;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +24,13 @@ return Application::configure(basePath: dirname(__DIR__))
             // 'http://example.com/foo/*',
             'http://localhost:8000/*',
 
+        ]);
+        $middleware->alias([
+            'onlyAdmin' => OnlyAdmin::class,
+            'onlyEmployer' => OnlyEmployer::class,
+            'onlyCandidate' => OnlyCandidate::class,
+            'onlyJobPostOwner' => OnlyJobPostOwner::class,
+            'onlyApplicationEmployer' => OnlyApplicationEmployer::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
